@@ -1,0 +1,54 @@
+<md-dialog aria-label="Estadísticas" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content" ng-if="tipoChart == 'chart-line'">
+                <div flex>
+                    <div class="line-content">
+                        <canvas
+                                id="line" 
+                                class="chart chart-line" 
+                                chart-data="estadisticas_data"
+                                chart-labels="estadisticas_labels" 
+                                chart-series="estadisticas_series" 
+                                chart-options="estadisticas_options">
+                                <!-- chart-dataset-override="datasetOverride" -->
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div layout="row" layout-xs="column" class="md-dialog-content" ng-if="tipoChart == 'chart-bar'">
+                <div flex>
+                    <div class="line-content">
+                        <canvas
+                                id="line" 
+                                class="chart chart-bar" 
+                                chart-data="estadisticas_data"
+                                chart-labels="estadisticas_labels" 
+                                chart-series="estadisticas_series" 
+                                chart-options="estadisticas_options">
+                                <!-- chart-dataset-override="datasetOverride" -->
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

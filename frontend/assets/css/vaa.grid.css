@@ -1,0 +1,334 @@
+/* extract from material.indigo-blue.min.css */
+.mdl-data-table {
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-collapse: collapse;
+    white-space: nowrap;
+    font-size: 13px;
+    background-color: #fff
+}
+
+.mdl-data-table thead {
+    padding-bottom: 3px
+}
+
+.mdl-data-table thead .mdl-data-table__select {
+    margin-top: 0
+}
+
+.mdl-data-table tbody tr {
+    position: relative;
+    height: 40px; /* Define altura del row */
+    -webkit-transition-duration: .28s;
+    transition-duration: .28s;
+    -webkit-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    -webkit-transition-property: background-color;
+    transition-property: background-color
+}
+
+.mdl-data-table tbody tr.is-selected {
+    background-color: #e0e0e0
+}
+
+.mdl-data-table tbody tr:hover {
+    background-color: #eee;
+}
+.mdl-data-table-hover2 tbody tr:hover {
+    background-color: #f6ffc7;
+}
+
+.mdl-data-table td {
+    text-align: right
+}
+
+.mdl-data-table th {
+    padding: 0 18px;
+    text-align: right
+}
+
+.mdl-data-table td:first-of-type,
+.mdl-data-table th:first-of-type {
+    padding-left: 24px
+}
+
+.mdl-data-table td:last-of-type,
+.mdl-data-table th:last-of-type {
+    padding-right: 24px
+}
+
+.mdl-data-table td {
+    position: relative;
+    vertical-align: top;
+    height: 20px;
+    border-top: 1px solid rgba(0, 0, 0, .12);
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    padding: 12px 18px 0;
+    box-sizing: border-box;
+    color: #000;
+    font-size: 14px;
+}
+
+.mdl-data-table td .mdl-data-table__select {
+    vertical-align: top;
+    position: absolute;
+    left: 24px
+}
+
+.mdl-data-table th {
+    position: relative;
+    vertical-align: bottom;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0;
+    height: 38px;
+    font-size: 12px;
+    /*color: rgba(0, 0, 0, .80);*/
+    color: #000;
+    padding-bottom: 8px;
+    box-sizing: border-box
+}
+
+.mdl-data-table th .mdl-data-table__select {
+    position: absolute;
+    bottom: 8px;
+    left: 24px
+}
+
+.mdl-data-table__select {
+    width: 16px
+}
+
+.mdl-data-table__cell--non-numeric.mdl-data-table__cell--non-numeric {
+    text-align: left
+}
+
+
+/* extract from http://angular-data-grid.github.io/demo/material/#!?page=3 */
+th:focus,
+a:focus {
+    outline: none; }
+
+.codepen-wrap {
+    margin-top: 15px; }
+
+.mdl-data-table {
+    width: 100%; }
+.mdl-data-table th {
+    cursor: pointer; }
+
+.mdl-data-table tr {
+    transition: none !important; }
+
+th md-select {
+    margin: 0; }
+
+.md-errors-spacer {
+    display: none; }
+
+ul.pagination {
+    padding: 0;
+    font-size: 0;
+    display: inline-block; }
+
+/*
+ * Paginacion usuario NO EDS
+ */
+.pagination > li {
+    display: inline-block;
+    vertical-align: middle;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-top: 0;
+}
+.pagination > li:first-child {
+    border-left: 1px solid #ddd;
+    border-radius: 2px 0 0 2px; }
+.pagination > li:last-child {
+    border-radius: 0 2px 2px 0; }
+.pagination a {
+    color: #000;
+    font-size: 13px;
+    padding: 0 10px;
+    line-height: 30px;
+    display: inline-block;
+    text-decoration: none;
+}
+.pagination .active {
+    background: #b3d234;
+    border-color: #8cd22c;
+}
+.pagination .active a {
+    color: #fff; }
+.pagination-page.active {
+    background: #b3d234;
+}
+.pagination-page.active a {
+    color: #fff;
+}
+
+/*
+ * Paginacion usuario EDS
+ */
+.pagination-eds .pagination > li {
+    display: inline-block;
+    vertical-align: middle;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-top: 0;
+}
+.pagination-eds .pagination > li:first-child {
+    border-left: 1px solid #ddd;
+    border-radius: 2px 0 0 2px; }
+.pagination-eds .pagination > li:last-child {
+    border-radius: 0 2px 2px 0; }
+.pagination-eds .pagination a {
+    color: #000;
+    font-size: 13px;
+    padding: 0 10px;
+    line-height: 30px;
+    display: inline-block;
+    text-decoration: none;
+}
+.pagination-eds.pagination .active {
+    background: #ff6c49 !important;
+    border-color: #ff4d24 !important;
+}
+.pagination-eds .pagination .active a {
+    color: #fff; }
+.pagination-eds .pagination-page.active {
+    background: #ff6c49 !important;;
+}
+.pagination-eds .pagination-page.active a {
+    color: #fff;
+}
+
+.material-icons, .sortable span:before, .sortable span:after {
+    font-family: 'Material Icons';
+    font-size: 18px;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+.material-icons-check {
+    line-height: 8px !important;
+}
+
+.sortable span {
+    position: relative;
+}
+.sortable span:before {
+    content: 'arrow_drop_down';
+    position: absolute;
+    right: -18px;
+    top: 2px;
+    color: #828282;
+}
+.sortable span:after {
+    content: 'arrow_drop_up';
+    position: absolute;
+    right: -18px;
+    top: -4px;
+    color: #828282;
+}
+
+.sortable.sort-ascent span:before {
+    display: none;
+}
+
+.sortable.sort-ascent span:after {
+    top: -5px;
+}
+
+.sortable.sort-descent span:before {
+    top: -5px;
+}
+
+.sortable.sort-descent span:after {
+    display: none;
+}
+
+.vaa-grid-value {
+    padding-top: 17px !important;
+}
+.vaa-grid-value-context-menu {
+    padding-top: 5px !important;
+    color: #5a5a5a !important;
+}
+
+ /* Scroll */
+.vaa-grid-container {
+    /* SE QUITA LA PAGINACION */
+    height: calc(100vh - 227px);
+}
+.mdl-data-table {
+    height: 300px;
+}
+.mdl-data-table tbody {
+    display: block;
+    /* SE QUITA LA PAGINACION */
+    /* height: 328px; */  /* Define altura de la tabla visible */
+    overflow: auto;
+}
+.mdl-data-table thead, .mdl-data-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.mdl-data-table thead {
+    width: 100%;
+}
+.mdl-data-table table {
+    width: 400px;
+}
+
+.mdl-data-table thead {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+ /* SE CAMBIA LA PAGINACION POR UN SCROLL */
+.mdl-data-table {
+    height: 396px;
+}
+/* :not(.calendario-bandas-horarias) */
+table  {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+}
+table thead {
+    /* head takes the height it requires, 
+    and it's not scaled when table is resized */
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em);
+}
+table:not(.calendario-bandas-horarias) tbody {
+    /* body takes all the remaining available space */
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+}
+table:not(.calendario-bandas-horarias) tbody tr {
+    width: 100%;
+}
+table:not(.calendario-bandas-horarias) thead, table:not(.calendario-bandas-horarias) tbody tr {
+    display: table;
+    table-layout: fixed;
+}
+
+.tr-par {
+    background-color: #e2ffe7;
+}
+.tr-impar {
+    background-color: #ffe2e2;
+}
+.tr-bold td{
+    font-weight: bold;
+}
+.tr-alert td {
+    color: red;
+}

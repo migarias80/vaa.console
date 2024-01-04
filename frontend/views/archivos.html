@@ -1,0 +1,126 @@
+<div class="seccion">
+
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">Archivos de Audio</span>
+            </p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top" class="tab-contenedor">
+            <md-tab>
+                <md-tab-label>
+                    <span ng-if="cargandoDepartamentos"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    <span ng-if="departamentosOk"><i class="fa fa-check green" aria-hidden="true"></i></span>
+                    <span ng-if="departamentosError"><i class="fa fa-exclamation red" aria-hidden="true"></i></span>
+                    Departamentos
+                </md-tab-label>
+                <md-tab-body>
+                    <md-content class="tab-archivos-departamentos">
+                        <div class="tab-contenido">
+                            <p class="titulo-archivos">
+                                <md-button style="margin-top: -17px; margin-left: -1px;" ng-disabled="cargando" ng-click="exportToCsv('#tableDepartamentos', 'Arhivos_Audio_Departamentos')" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+                                    <md-icon><i style="color: #fff !important;" class="material-icons">file_download</i></md-icon>
+                                    Exportar
+                                </md-button>
+                            </p>
+
+                            <div layout="column" layout-fill class="vaa-grid-container">
+                                <md-content layout-padding layout="row" layout-align="center">
+                                    <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                                        <div grid-data id='test' grid-options="gridOptionsDepartamentos" grid-actions="gridActions">
+                                            <div>
+                                                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="tableDepartamentos">
+                                                    <thead>
+                                                    <tr>
+                                                        <th sortable="archivo" class="sortable vaa-grid-title">
+                                                            <span>Archivos Faltantes</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="grid-con-acciones-onhover" grid-item>
+                                                        <td class="vaa-grid-value" ng-bind="item.archivo"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div ui-grid="gridOptionsDepartamentos" ui-grid-selection ui-grid-exporter class="grid">
+                                            <div class="watermark" style="margin-top: -108px !important;" ng-show="!gridOptionsDepartamentos.data.length && !cargandoDepartamentos">Todos los archivos de audio de los departamentos fueron encontrados</div>
+                                        </div>
+                                    </div>
+                                </md-content>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab-body>
+            </md-tab>
+			
+			<md-tab>
+                <md-tab-label>
+                    <span ng-if="cargandoPersonas"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    <span ng-if="personasOk"><i class="fa fa-check green" aria-hidden="true"></i></span>
+                    <span ng-if="personasError"><i class="fa fa-exclamation red" aria-hidden="true"></i></span>
+                    <span ng-if="personasWarning && !personasError"><i class="fa fa-exclamation yellow" aria-hidden="true"></i></span>
+                    Personas
+                </md-tab-label>
+                <md-tab-body>
+                    <md-content class="tab-archivos-personas">
+                        <div class="tab-contenido">
+                            <p class="titulo-archivos">
+                                <md-button style="margin-top: -17px; margin-left: -1px;" ng-disabled="cargando" ng-click="exportToCsv('#tablePersonas', 'Arhivos_Audio_Personas')" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+                                    <md-icon><i style="color: #fff !important;" class="material-icons">file_download</i></md-icon>
+                                    Exportar
+                                </md-button>
+                            </p>
+                            <div layout="column" layout-fill class="vaa-grid-container">
+                                <md-content layout-padding layout="row" layout-align="center">
+                                    <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                                        <div grid-data id='test' grid-options="gridOptionsPersonas" grid-actions="gridActions">
+                                            <div>
+                                                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="tablePersonas">
+                                                    <thead>
+                                                    <tr>
+                                                        <th sortable="archivo" class="sortable vaa-grid-title">
+                                                            <span>Archivos Faltantes</span>
+                                                        </th>
+                                                        <th sortable="obligatorioOpcional" class="sortable vaa-grid-title">
+                                                            <span>Obligatorio/Opcional</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="grid-con-acciones-onhover" grid-item>
+                                                        <td class="vaa-grid-value" ng-bind="item.archivo"></td>
+                                                        <td class="vaa-grid-value" ng-bind="item.obligatorioOpcional"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div ui-grid="gridOptionsPersonas" ui-grid-selection ui-grid-exporter class="grid">
+                                            <div class="watermark" style="margin-top: -108px !important;" ng-if="!gridOptionsPersonas.data.length && !cargando">Se encuentran todos los archivos de audio de las personas</div>
+                                        </div>
+                                    </div>
+                                </md-content>
+                            </div>
+                            <div ng-if="mostrarPersonas && !personasError && !personasWarning">
+                                <div layout="column" layout-fill class="vaa-grid-container" style="background-color: #e8ffa7; height: 70px; padding: 10px; width: 50%; margin: 0 auto;">
+                                    <p style="text-align: center; font-size: 25px;">Todos los archivos de audio de las personas fueron encontrados<i class="material-icons" style="margin-left: 10px;">done_all</i></p>
+                                </div>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab-body>
+            </md-tab>
+			
+		</md-tabs>
+	</div>
+
+</div>
+<md-progress-linear ng-if="cargandoDepartamentos || cargandoPersonas" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;"></md-progress-linear>

@@ -1,0 +1,19 @@
+dataGrid.js:
+
+Cambio para generar un ordenamiento por default
+/*
+ * Cambio en ordenamiento por defecto
+ */
+// var direction = $scope.sortOptions.predicate === predicate && $scope.sortOptions.direction === 'desc' ? 'asc' : 'desc';
+var direction = $scope.sortOptions.predicate === predicate && $scope.sortOptions.direction === 'asc' ? 'desc' : 'asc';
+
+------------------------------------------------------------------------------------------------------------
+
+pagination.js
+
+/*
+ * Agregado en rootScope de la funcion SelectPage para poder controlarlo desde afuera de la directiva
+ */
+$rootScope.customSelectPage = function(page, evt) {
+    $scope.selectPage(page, evt);
+};

@@ -1,0 +1,204 @@
+<div class="seccion">
+
+    <div class="welcome welcome-eds">
+        <div class="welcome-text">
+            <p><span class="md-headline">{{nombreUsuario}} @ Administración General</span></p>
+            <p><span class="md-subhead">{{lastAccess}}</span></p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top" class="tab-contenedor">
+            
+            <md-tab label="Listado de Empresas">
+                <md-content class="tab-empresas">
+                    <div class="tab-contenido">
+
+                        <div flex-gt-sm="100" flex="" style="padding: 8px 0px 8px 0px;">
+                            <md-subheader class="md-no-sticky">Seleccione la empresa a tomar el control</md-subheader>
+                            <md-content class="listado-iconos">
+                                <md-list flex="" style="height: 60vh;">
+                                    <md-list-item class="md-3-line vaa-md-list" ng-repeat="item in empresas">
+                                        <img ng-show="item.img" ng-src="assets/public/{{item.img}}" class="md-avatar">
+                                        <img ng-show="!item.img" ng-src="assets/public/default.png" class="md-avatar">
+                                        <div class="md-list-item-text" layout="column">
+                                            <h3 style="color: #131313;">{{ item.name }}</h3>
+                                            <h4 style="color: #131313;">Líneas Entrantes Asignadas: {{ item.cant_max_lines }}</h4>
+                                            <p style="color: #131313; font-weight: 400;">URL: /login/{{ item.url_name }}</p>
+                                        </div>
+                                        <div class="vaa-md-list-buttons">
+                                            <md-menu>
+                                                <md-button class="md-icon-button" aria-label="More" ng-click="openMenu($mdMenu, $event)">
+                                                    <i class="material-icons">more_vert</i>
+                                                </md-button>
+                                                <md-menu-content width="2">
+                                                    <md-menu-item>
+                                                        <md-button ng-click="tomarControl(item)">
+                                                            <md-icon><i class="material-icons">keyboard_tab</i></md-icon>
+                                                            Tomar Control de {{ item.name }}
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button ng-click="editarEmpresa(item)">
+                                                            <md-icon><i class="material-icons">mode_edit</i></md-icon>
+                                                            Editar Nombre y URL
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button ng-click="eliminarEmpresa(item)">
+                                                            <md-icon><i class="material-icons">delete</i></md-icon>
+                                                            Eliminar
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>
+                                        </div>
+                                        <md-divider ng-if="!$last"></md-divider>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
+
+                            <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                                <div class="watermark" ng-show="!empresas.length && !cargando">No se encontraron empresas</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Configuración General">
+                <md-content class="tab-empresas-configuracion">
+                    <div class="tab-contenido">
+                        
+                        <div layout="row" layout-xs="column" class="row" style="padding: 0 10px 0 15px;">
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cantidad Total de Líneas Entrantes</label>
+                                <input class="input-generic" type="text" ng-model="cfg_cant_max_lines_global.par_value" maxlength="5">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Directorio Raiz de los Archivos de Audio</label>
+                                <input class="input-generic" type="text" ng-model="vox_directory.par_value" maxlength="100">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Archivo de Config. del MHC</label>
+                                <input class="input-generic" type="text" ng-model="mhc_file.par_value" maxlength="100">
+                            </md-input-container>
+                        </div>
+
+                        <div class="md-tab-buttons" style="margin-left: 17px; margin-top: 0px; margin-bottom: 20px;">
+                            <md-button ng-disabled="cargando" style="margin-left: 0 !important;" ng-click="modificarConfiguracionGlobal()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Guardar</md-button>
+                        </div>
+
+                        <div layout="row" layout-wrap layout-xs="column" class="md-dialog-content" style="width: 75%; margin: 0 auto;">
+                            <div flex="50">
+                                <div class="chart-content">
+                                    <div class="chart-pie-content">
+                                        <canvas id="pie"
+                                                class="chart chart-pie"
+                                                chart-data="lines_data"
+                                                chart-labels="lines_labels"
+                                                chart-options="lines_options">
+                                        </canvas>
+                                    </div>
+                                </div>
+                                <p ng-if="porcentajeExcedenteLineasEntrantes>0" style="text-align: center; margin-top: 20px; color: #666; font-weight: 400;">
+                                    Excedido por {{porcentajeExcedenteLineasEntrantes}}%
+                                </p>
+                            </div>
+                            <div flex="50">
+                                <div class="chart-content">
+                                    <div class="chart-pie-content">
+                                        <canvas id="pie2"
+                                                class="chart chart-pie"
+                                                chart-data="detail_data"
+                                                chart-labels="detail_labels"
+                                                chart-options="detail_options">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Simulador de Activación por DNIS">
+                <md-content class="tab-empresas-configuracion">
+                    <div class="tab-contenido">
+                        <div layout="row" layout-xs="column" class="row" style="padding: 0 10px 0 15px;">
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">DNIS</label>
+                                <input class="input-generic" type="text" ng-model="dnis_regex" maxlength="1024">
+                            </md-input-container>
+                        </div>
+                        <div class="md-tab-buttons" style="margin-left: 17px; margin-top: 0px; margin-bottom: 20px;">
+                            <md-button ng-disabled="cargando" style="margin-left: 0 !important;" ng-click="evaluarDNIS()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Simular Llamada</md-button>
+                        </div>
+
+                        <div layout="column" layout-fill class="vaa-grid-container" ng-if="gridOptions.data.length == 1" style="background-color: #e8ffa7; height: 50px; padding: 10px; width: 50%; margin: 0 auto;">
+                            <p style="text-align: center; font-size: 25px;">{{::nombreEmpresaEvaluarDNIS}}<i class="material-icons" style="margin-left: 10px;">done_all</i></p>
+                        </div>
+
+                        <div layout="column" layout-fill class="vaa-grid-container" ng-if="gridOptions.data.length == 0" style="background-color: #f19191; height: 50px; padding: 15px; width: 71%; margin: 40px auto;">
+                            <p style="text-align: center; font-size: 25px; color: #fff;">No se encontraron empresas que sean activadas con el DNIS ingresado</p>
+                        </div>
+
+                        <div layout="column" layout-fill class="vaa-grid-container" ng-if="gridOptions.data.length > 1">
+                            <md-content layout-padding layout="row" layout-align="center">
+                                <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                                    <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                                        <div>
+                                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                                                <thead>
+                                                <tr>
+                                                    <th sortable="name" class="sortable vaa-grid-title">
+                                                        <span>Empresa</span>
+                                                    </th>
+                                                    <th sortable="guia" class="sortable vaa-grid-title">
+                                                        <span>Guia</span>
+                                                    </th>
+                                                    <th sortable="regex" class="sortable vaa-grid-title">
+                                                        <span>Expresión Regular</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-keydown="key($event)" context-menu="menuOptions" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="isSelected(item)? 'item-seleccionado' : ''">
+                                                    <td class="vaa-grid-value" ng-bind="item.name"></td>
+                                                    <td class="vaa-grid-value" ng-bind="item.guia"></td>
+                                                    <td class="vaa-grid-value" ng-bind="item.regex"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>                        
+                                    </div>
+                                    <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                                        <div class="watermark" ng-show="!gridOptions.data.length && !cargando">No se encontraron registros</div>
+                                    </div>
+                                </div>
+                            </md-content>
+                        </div>
+
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+
+    <div class="lock-size" layout="row" layout-align="right bottom">
+        <md-fab-speed-dial>
+            <md-fab-trigger>
+
+                <md-button ng-click="crearEmpresa()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                    <md-tooltip md-direction="top">
+                        Nueva Empresa
+                    </md-tooltip>
+                    add
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

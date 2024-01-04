@@ -1,0 +1,730 @@
+<md-dialog aria-label="Nueva persona" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+
+            <div ng-class="getEnvironmentClass()">
+                <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+                    <md-tab label="Datos Generales">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Primer Nombre</label>
+                                        <input class="input-generic" type="text" required ng-model-options="{ debounce: 500 }" ng-model="phb_first_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Primer Apellido</label>
+                                        <input class="input-generic" type="text" required ng-model="phb_last_name1" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Apodo</label>
+                                        <input class="input-generic" type="text" ng-model="phb_nick_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container" style="width: 89%;">
+                                        <label>Departamento</label>
+                                        <md-select required ng-model="phb_dep_id">
+                                            <md-option ng-repeat="item in departamentos | orderBy: 'dep_name' track by $index" ng-value="item.dep_id">{{::item.dep_name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Email</label>
+                                        <input class="input-generic" type="text" ng-model="phb_email" maxlength="100">
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Segundo Nombre</label>
+                                        <input class="input-generic" type="text" ng-model="phb_middle_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Segundo Apellido</label>
+                                        <input class="input-generic" type="text" ng-model="phb_last_name2" maxlength="100">
+                                    </md-input-container>
+                                    <div style="margin-top: 36px;" layout="row">
+                                        <md-checkbox ng-class="getCheckboxClass()" ng-model="phb_is_sec" aria-label="Checkbox 1">
+                                            <span class="label-generic"> Es Asistente</span>
+                                        </md-checkbox>
+                                        <md-checkbox style="margin-left: 30px;" ng-class="getCheckboxClass()" ng-model="phb_is_transf" aria-label="Checkbox 1">
+                                            <span class="label-generic"> Admite Llamadas para Otras Personas</span>
+                                        </md-checkbox>
+                                    </div>
+                                    <md-input-container class="md-select-container" style="margin-top: 12px !important; width: 89%;">
+                                        <label>Asistente Asignado</label>
+                                        <md-select ng-model="phb_sec_id" ng-change="phb_sec_id? '' : phb_msg_sec_personal = false">
+                                            <md-option ng-value=""><em>Ninguna</em></md-option>
+                                            <md-option ng-repeat="item in secretarias track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-checkbox ng-disabled="phb_sec_id == null || phb_sec_id == undefined" style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_msg_sec_personal" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Utilizar Mensaje de Asistente Personal</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Datos Telefónicos">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Interno Diurno</label>
+                                        <input class="input-generic" type="text" required ng-model="phb_daytime_number" maxlength="50" ng-blur="actualizarDTMFDiurno()" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Celular Diurno</label>
+                                        <input class="input-generic" type="text" ng-model="phb_daytime_cellular" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 27px !important;">
+                                        <label class="label-generic">Clave para Acceso Externo</label>
+                                        <input class="input-generic" type="text" ng-model="phb_ext_access_key" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal">
+                                        <label>Fax Diurno</label>
+                                        <md-select ng-model="phb_fax_daytime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in faxes | filter:{fax_enabled_daytime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" ng-class="phb_fax_daytime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Fax Diurno</label>
+                                        <input ng-disabled="!(phb_fax_daytime > 0)" class="input-generic" type="text" ng-model="phb_dialpost_number_fax_daytime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal">
+                                        <label>Voice Mail Diurno</label>
+                                        <md-select ng-model="phb_vma_daytime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in vma | filter:{vma_enabled_daytime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="phb_vma_daytime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Voice Mail Diurno</label>
+                                        <input ng-disabled="!(phb_vma_daytime > 0)" class="input-generic" type="text" ng-model="phb_dialpost_number_vma_daytime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Interno Nocturno</label>
+                                        <input class="input-generic" type="text" required ng-model="phb_nighttime_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Celular Nocturno</label>
+                                        <input class="input-generic" type="text" ng-model="phb_nighttime_cellular" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal" style="margin-top: 76px !important;">
+                                        <label>Fax Nocturno</label>
+                                        <md-select ng-model="phb_fax_nighttime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in faxes | filter:{fax_enabled_nighttime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="phb_fax_nighttime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Fax Nocturno</label>
+                                        <input ng-disabled="!(phb_fax_nighttime > 0)" class="input-generic" type="text" ng-model="phb_dialpost_number_fax_nighttime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal">
+                                        <label>Voice Mail Nocturno</label>
+                                        <md-select ng-model="phb_vma_nighttime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in vma | filter:{vma_enabled_nighttime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="phb_vma_nighttime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Voice Mail Nocturno</label>
+                                        <input ng-disabled="!(phb_vma_nighttime > 0)" class="input-generic" type="text" ng-model="phb_dialpost_number_vma_nighttime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Reconoc. de Voz">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="md-select-container md-select-container-modal">
+                                        <label>Confirmación</label>
+                                        <md-select ng-model="phb_confirmation">
+                                            <md-option ng-repeat="item in optConfirmacion track by $index" ng-value="item.oco_id">{{::item.oco_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Fonética del Primer Nombre</label>
+                                        <input class="input-generic" type="text" ng-model="phb_fon_first_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Fonética del Primer Apellido</label>
+                                        <input class="input-generic" type="text" ng-model="phb_fon_last_name1" maxlength="100">
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="md-select-container">
+                                        <label>Tipo de Inserción en Gramática</label>
+                                        <md-select multiple="true" ng-model="phb_grammar_options_selected" class="md-select-multiple">
+                                            <md-option ng-repeat="item in optGrammar track by $index" ng-value="item.oig_index">{{::item.oig_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Fonética del Segundo Nombre</label>
+                                        <input class="input-generic" type="text" ng-model="phb_fon_middle_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Fonética del Segundo Apellido</label>
+                                        <input class="input-generic" type="text" ng-model="phb_fon_last_name2" maxlength="100">
+                                    </md-input-container>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Acciones Guía Interna" md-on-select="tabGuiaInterna.contenidoVisible=true">
+                        <md-content style="height: 456px;" ng-if="!tabGuiaInterna.contenidoVisible">
+                        </md-content>
+                        <md-content class="md-content-dialog" ng-if="tabGuiaInterna.contenidoVisible">
+
+                            <!-- TAB DIVISOR GUIA -->
+                            <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab1" md-align-tabs="top">
+                                <md-tab label="Diurno">
+
+                                    <!-- DIV DIVISOR MULTIPLES ACCIONES -->
+                                    <div ng-repeat="accion in accionesIntDiur track by $index" class="contenedor-accion">
+
+                                        <md-content class="md-content-dialog">
+
+                                            <!-- GUIA INTERNA / DIURNO -->
+                                            <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                <md-checkbox ng-if="$index==0" style="margin-left: -23px; margin-top: 16px; margin-right: 15px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesIntDiur, 'accionesIntDiur');" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                    <span class="label-generic"> Acciones Predefinidas</span>
+                                                </md-checkbox>
+                                                <md-button ng-if="$index==0" ng-click="agregarAccion(accionesIntDiur, 'accionesIntDiur')" ng-disabled="accion.phb_trans_pred_int_diurno">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Otra Alternativa</span>
+                                                </md-button>
+                                            </div>
+                                            <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                <div flex="30">
+                                                    <md-input-container style="width: 90%;" class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Destino de Transferencia Solicitado</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.tap_phb_trans_type_int_diur" ng-change="destinoTransferenciaChange(accion, 'accionesIntDiur', accion.tap_phb_trans_type_int_diur);">
+                                                            <md-option ng-value="2">Persona</md-option>
+                                                            <md-option ng-value="3">Asistente</md-option>
+                                                            <md-option ng-value="1">Celular</md-option>                                                            
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label class="label-generic">Número de Origen a Filtrar</label>
+                                                        <input ng-disabled="accion.phb_trans_pred_int_diurno" class="input-generic" type="text" ng-model="accion.phb_origin_number_int_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <!-- <md-button ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesIntDiur)" class="md-button md-ink-ripple vaa-md-raised vaa-md-raised-gris vaa-md-raised-nomargin">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i> <span class="capitalize">Eliminar</span>
+                                                        </md-button> -->
+                                                        <md-button class="md-button-eliminar" style="margin-left: 1px;" ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesIntDiur)">
+                                                            Eliminar
+                                                        </md-button>
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex="40">
+                                                    <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 1</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion1">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex="30">
+                                                    <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                        <label>Transferir a</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion1 != 7000" ng-model="accion.int_diur_accion1_transfPhbId">
+                                                            <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                        <label>Transferir a</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2NoReply != 7000" ng-model="accion.int_diur_accion2NoReply_transfPhbId">
+                                                            <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                        <label>Transferir a</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2Busy != 7000" ng-model="accion.int_diur_accion2Busy_transfPhbId">
+                                                            <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                        <label>Transferir a</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3NoReply != 7000" ng-model="accion.int_diur_accion3NoReply_transfPhbId">
+                                                            <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                        <label>Transferir a</label>
+                                                        <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3Busy != 7000" ng-model="accion.int_diur_accion3Busy_transfPhbId">
+                                                            <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+
+                                        </md-content>
+
+                                    </div>
+
+                                </md-tab>
+                                <md-tab label="Noctuno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR MULTIPLES ACCIONES -->
+                                        <div ng-repeat="accion in accionesIntNoct track by $index" class="contenedor-accion">
+
+                                            <md-content class="md-content-dialog">
+
+                                                <!-- GUIA INTERNA / NOCTURNA -->
+                                                <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                    <md-checkbox ng-if="$index==0" style="margin-left: -23px; margin-top: 16px; margin-right: 15px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesIntNoct, 'accionesIntNoct');" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                        <span class="label-generic"> Acciones Predefinidas</span>
+                                                    </md-checkbox>
+                                                    <md-button ng-if="$index==0" ng-click="agregarAccion(accionesIntNoct, 'accionesIntNoct')" ng-disabled="accion.phb_trans_pred_int_diurno">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Otra Alternativa</span>
+                                                    </md-button>
+                                                </div>
+                                                <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                    <div flex="30">
+                                                        <!--<md-checkbox ng-if="$index==0" style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesIntNoct);" ng-change="transferenciaPredeterminadaChange(accionesIntDiur);" ng-change="transferenciaPredeterminadaChange(accionesIntDiur);" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                            <span class="label-generic"> Acciones Predefinidas</span>
+                                                        </md-checkbox>-->
+                                                        <md-input-container style="width: 90%;" class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Destino de Transferencia Solicitado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.tap_phb_trans_type_int_diur" ng-change="destinoTransferenciaChange(accion, 'accionesIntNoct', accion.tap_phb_trans_type_int_diur);">
+                                                                <md-option ng-value="2">Persona</md-option>
+                                                                <md-option ng-value="3">Asistente</md-option>
+                                                                <md-option ng-value="1">Celular</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label class="label-generic">Número de Origen a Filtrar</label>
+                                                            <input ng-disabled="accion.phb_trans_pred_int_diurno" class="input-generic" type="text" ng-model="accion.phb_origin_number_int_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <!-- <md-button ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesIntNoct)" class="md-button md-ink-ripple vaa-md-raised vaa-md-raised-gris vaa-md-raised-nomargin">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i> <span class="capitalize">Eliminar</span>
+                                                            </md-button> -->
+                                                            <md-button class="md-button-eliminar" style="margin-left: 1px;" ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesIntNoct)">
+                                                                Eliminar
+                                                            </md-button>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="40">
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 1</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion1">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="30">
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion1 != 7000" ng-model="accion.int_diur_accion1_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2NoReply != 7000" ng-model="accion.int_diur_accion2NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2Busy != 7000" ng-model="accion.int_diur_accion2Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3NoReply != 7000" ng-model="accion.int_diur_accion3NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3Busy != 7000" ng-model="accion.int_diur_accion3Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                </div>
+
+                                            </md-content>
+
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Acciones Guía Externa" md-on-select="tabGuiaExterna.contenidoVisible=true">
+                        <md-content style="height: 456px;" ng-if="!tabGuiaExterna.contenidoVisible">
+                        </md-content>
+                        <md-content class="md-content-dialog" ng-if="tabGuiaExterna.contenidoVisible">
+
+                            <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab2" md-align-tabs="top">
+                                <md-tab label="Diurno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR MULTIPLES ACCIONES -->
+                                        <div ng-repeat="accion in accionesExtDiur track by $index" class="contenedor-accion">
+
+                                            <md-content class="md-content-dialog">
+
+                                                <!-- GUIA EXTERNA / DIURNO -->
+                                                <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                    <md-checkbox ng-if="$index==0" style="margin-left: -23px; margin-top: 16px; margin-right: 15px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesExtDiur, 'accionesExtDiur');" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                        <span class="label-generic"> Acciones Predefinidas</span>
+                                                    </md-checkbox>
+                                                    <md-button ng-if="$index==0" ng-click="agregarAccion(accionesExtDiur, 'accionesExtDiur')" ng-disabled="accion.phb_trans_pred_int_diurno">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Otra Alternativa</span>
+                                                    </md-button>
+                                                </div>
+                                                <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                    <div flex="30">
+                                                        <!--<md-checkbox ng-if="$index==0" style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesExtDiur);" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                            <span class="label-generic"> Acciones Predefinidas</span>
+                                                        </md-checkbox>-->
+                                                        <md-input-container style="width: 90%;" class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Destino de Transferencia Solicitado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.tap_phb_trans_type_int_diur" ng-change="destinoTransferenciaChange(accion, 'accionesExtDiur', accion.tap_phb_trans_type_int_diur);">
+                                                                <md-option ng-value="2">Persona</md-option>
+                                                                <md-option ng-value="3">Asistente</md-option>
+                                                                <md-option ng-value="1">Celular</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label class="label-generic">Número de Origen a Filtrar</label>
+                                                            <input ng-disabled="accion.phb_trans_pred_int_diurno" class="input-generic" type="text" ng-model="accion.phb_origin_number_int_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <!-- <md-button ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesExtDiur)" class="md-button md-ink-ripple vaa-md-raised vaa-md-raised-gris vaa-md-raised-nomargin">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i> <span class="capitalize">Eliminar</span>
+                                                            </md-button> -->
+                                                            <md-button class="md-button-eliminar" style="margin-left: 1px;" ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesExtDiur)">
+                                                                Eliminar
+                                                            </md-button>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="40">
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 1</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion1">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="30">
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion1 != 7000" ng-model="accion.int_diur_accion1_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2NoReply != 7000" ng-model="accion.int_diur_accion2NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2Busy != 7000" ng-model="accion.int_diur_accion2Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3NoReply != 7000" ng-model="accion.int_diur_accion3NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3Busy != 7000" ng-model="accion.int_diur_accion3Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                </div>
+
+                                            </md-content>
+
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                                <md-tab label="Noctuno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR MULTIPLES ACCIONES -->
+                                        <div ng-repeat="accion in accionesExtNoct track by $index" class="contenedor-accion">
+
+                                            <md-content class="md-content-dialog">
+
+                                                <!-- GUIA EXTERNA / NOCTURNA -->
+                                                <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                    <md-checkbox ng-if="$index==0" style="margin-left: -23px; margin-top: 16px; margin-right: 15px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesExtNoct, 'accionesExtNoct');" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                        <span class="label-generic"> Acciones Predefinidas</span>
+                                                    </md-checkbox>
+                                                    <md-button ng-if="$index==0" ng-click="agregarAccion(accionesExtNoct, 'accionesExtNoct')" ng-disabled="accion.phb_trans_pred_int_diurno">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Otra Alternativa</span>
+                                                    </md-button>
+                                                </div>
+                                                <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                    <div flex="30">
+                                                        <!--<md-checkbox ng-if="$index==0" style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange(accionesExtNoct);" ng-model="accion.phb_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                            <span class="label-generic"> Acciones Predefinidas</span>
+                                                        </md-checkbox>-->
+                                                        <md-input-container style="width: 90%;" class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Destino de Transferencia Solicitado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.tap_phb_trans_type_int_diur" ng-change="destinoTransferenciaChange(accion, 'accionesExtNoct', accion.tap_phb_trans_type_int_diur);">
+                                                                <md-option ng-value="2">Persona</md-option>
+                                                                <md-option ng-value="3">Asistente</md-option>
+                                                                <md-option ng-value="1">Celular</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label class="label-generic">Número de Origen a Filtrar</label>
+                                                            <input ng-disabled="accion.phb_trans_pred_int_diurno" class="input-generic" type="text" ng-model="accion.phb_origin_number_int_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                        </md-input-container>
+                                                        <md-input-container class="vaa-input" layout="row" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <!-- <md-button ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesExtNoct)" class="md-button md-ink-ripple vaa-md-raised vaa-md-raised-gris vaa-md-raised-nomargin">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i> <span class="capitalize">Eliminar</span>
+                                                            </md-button> -->
+                                                            <md-button class="md-button-eliminar" style="margin-left: 1px;" ng-disabled="accion.phb_trans_pred_int_diurno" ng-click="quitarAccion(accion, accionesExtNoct)">
+                                                                Eliminar
+                                                            </md-button>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="40">
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 1</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion1">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion2Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3NoReply">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-select-container" ng-class="!accion.phb_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                            <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno" ng-model="accion.int_diur_accion3Busy">
+                                                                <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex="30">
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion1 != 7000" ng-model="accion.int_diur_accion1_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2NoReply != 7000" ng-model="accion.int_diur_accion2NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion2Busy != 7000" ng-model="accion.int_diur_accion2Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3NoReply != 7000" ng-model="accion.int_diur_accion3NoReply_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                        <md-input-container style="margin-left: 10px !important;" class="md-select-container" ng-class="!accion.e? '' : 'input-generic-disabled'">
+                                                            <label>Transferir a</label>
+                                                            <md-select ng-disabled="accion.phb_trans_pred_int_diurno || accion.int_diur_accion3Busy != 7000" ng-model="accion.int_diur_accion3Busy_transfPhbId">
+                                                                <md-option ng-repeat="item in transferibles track by $index" ng-value="item.phb_id">{{::item.phb_full_name}}</md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                </div>
+
+                                            </md-content>
+
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Opciones Avanzadas" md-on-select="tabOpcionesAvanzadas.contenidoVisible=true">
+                        <md-content style="height: 346px;" ng-show="!tabOpcionesAvanzadas.contenidoVisible">
+                        </md-content>
+                        <md-content class="md-content-dialog" ng-show="tabOpcionesAvanzadas.contenidoVisible">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_allow_htdf_int" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por DTMF en Guia Interna</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_allow_htdf_ext" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por DTMF en Guia Externa</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_allow_voz_int" aria-label="Checkbox 1">
+                                            <span class="label-generic"> Habilitar Acceso por voz en Guia Interna</span>
+                                        </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_allow_voz_ext" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por voz en Guia Externa</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_gi_allow_playback_int_number" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Reproducción de Número de Interno para Guia Interna</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_ge_allow_playback_int_number" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Reproducción de Número de Interno para Guia Externa</span>
+                                    </md-checkbox>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row" ng-class="phb_allow_htdf_int? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Acceso por DTMF en Guia Interna</label>
+                                        <input ng-disabled="!phb_allow_htdf_int" class="input-generic" type="text" ng-model="phb_int_guide_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" ng-class="phb_allow_htdf_ext? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Acceso por DTMF en Guia Externa</label>
+                                        <input ng-disabled="!phb_allow_htdf_ext" class="input-generic" type="text" ng-model="phb_ext_guide_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="phb_play_msg_info_tranf" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Reproducir Mensaje Informativo en Transferencias Supervisadas</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+			<md-button ng-click="aplicar()" class="md-primary">
+                Aplicar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

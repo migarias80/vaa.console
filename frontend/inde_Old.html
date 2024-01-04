@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="EDS">
+        <link rel="shortcut icon" href="assets/img/favicon.png">
+
+        <title>EDS VAA</title>
+
+        <!-- jQuery -->
+        <script src="assets/js/jquery/jquery-3.2.1.min.js"></script>
+
+        <!-- AngularJS: https://cdnjs.com/libraries/angular.js/ -->
+        <script src="app/angular.min.js"></script>
+        <script src="app/angular-route.min.js"></script>
+        <script src="app/angular-locale_es-ar.js"></script>
+        <script src="app/angular-animate.js"></script>
+        <script src="app/app.js"></script>
+
+        <!-- Notify -->
+        <link rel="stylesheet" href="assets/js/angular-notify/angular-notify.min.css" />
+        <script src="assets/js/angular-notify/angular-notify.min.js"></script>
+
+        <!-- Angular Material: https://github.com/angular/material-->
+        <link rel="stylesheet" href="assets/js/material-master/angular-material.css">
+        <script src="assets/js/material-master/angular-aria.js"></script>
+        <script src="assets/js/material-master/angular-material.js"></script>
+
+        <!-- Estilos -->
+        <link rel="stylesheet" href="assets/css/vaa.reset.css">
+        <link rel="stylesheet" href="assets/css/vaa.css">
+        <link rel="stylesheet" href="assets/css/vaa.grid.css">
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+        <!-- Iconos -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Librerias -->
+        <link rel="stylesheet" href="assets/css/font-awesome-4.7.0/css/font-awesome.css">
+        <script src="assets/js/angular-md5/angular-md5.js"></script>
+        <script src="assets/js/angular-datagrid/angular-aria.min.js"></script>
+        <script src="assets/js/angular-datagrid/pagination.js"></script>
+        <script src="assets/js/angular-datagrid/dataGrid.js"></script>
+
+        <!-- Calendario -->
+        <link rel="stylesheet" href="assets/js/angular-responsive-calendar/dist/css/calendar.min.css"/>
+        <script src="assets/js/angular-responsive-calendar/dist/js/calendar-tpls.js"></script>
+
+        <!-- Slider -->
+        <link rel="stylesheet" href="assets/js/angularjs-slider/dist/rzslider.css"/>
+        <script src="assets/js/angularjs-slider/dist/rzslider.js"></script>
+
+        <!-- Chart -->
+        <script src="assets/js/chart.js/Chart.min.js"></script>
+        <script src="assets/js/angular-chart.js/angular-chart.min.js"></script>
+
+        <!-- Intro.js -->
+        <link rel="stylesheet" href="assets/js/intro.js-master/introjs.css"/>
+        <script type="text/javascript" src="assets/js/intro.js-master/intro.js"></script>
+
+        <!-- ContextMenu -->
+        <script src="assets/js/ui.bootstrap.contextMenu/contextMenu.js"></script>
+
+        <!-- ng-pattern -->
+        <script src="assets/js/AlphaGit-ng-pattern-restrict/src/ng-pattern-restrict.js"></script>
+
+        <!-- ng-pattern -->
+        <link rel="stylesheet" href="assets/js/noUiSlider.11.1.0/nouislider.min.css"/>
+        <script src="assets/js/noUiSlider.11.1.0/nouislider.min.js"></script>
+
+        <!-- sha-256 -->
+        <script type="text/javascript" src="assets/js/jsSHA/sha256.js"></script>
+    </head>
+    <body ng-app="VaaApp" layout="row" ng-cloak>
+
+        <!-- <md-backdrop ng-show="loading" id="loading-backdrop" class="md-opaque md-default-theme"></md-backdrop>
+        <md-progress-circular ng-show="loading" md-mode="indeterminate"></md-progress-circular> -->
+
+        <md-sidenav ng-if="!login" md-component-id="left" class="md-sidenav-left" opened="true" md-is-locked-open="true" ng-class="getEnvironmentClass()"   >
+            <h1 class="logo">
+                <img id="logoEmpresa" ng-src="{{getLogoEmpresa()}}" />
+                <!--<div id="imgUpload"></div>-->
+                <!--<div class="overlay"><span>Cambiar imagen</span></div>-->
+            </h1>
+
+            <ul class="menu-items">
+                <li id="{{item.id}}" ng-repeat="item in menu" ng-click="item.action()" class="item-contenedor" ng-class="getIndexMenuClass(item).contenedor" >
+                    <p class="item" ng-class="getIndexMenuClass(item).item">{{item.label}}</p>
+                </li>
+            </ul>
+        </md-sidenav>
+
+        <div layout="column" role="main" flex>
+            <md-toolbar class="header" ng-show="!login" id="topbar" ui-view="topbar" ng-class="getEnvironmentClass()">
+                <md-menu>
+                    <md-button ng-if="mostrarEmpresas" class="md-button-empresas {{!mostrarAdmUsuarios? 'md-button-empresas-ajust-x1' : ''}}" ng-click="goto('home-eds')">
+                        <md-icon class="ng-scope" role="img" aria-hidden="true">
+                            <i class="material-icons">home</i>
+                        </md-icon>
+                        Home
+                    </md-button>
+                </md-menu>
+                
+                <md-menu>
+                    <md-button
+                        ng-if="mostrarAdmUsuarios"
+                        class="md-button-usuarios {{mostrarAdmUsuarios && mostrarEmpresas? 'md-button-usuarios-ajust-x1' : 'md-button-usuarios-ajust-x2'}}"
+                        ng-click="goto('usuarios')"
+                    >
+                        <md-icon id="btnGestionUsuarios" class="ng-scope" role="img" aria-hidden="true">
+                            <i class="material-icons">supervisor_account</i>
+                        </md-icon>
+                        Gestión de usuarios
+                    </md-button>
+                </md-menu>
+
+                <md-menu>
+                    <md-button class="md-button-persona" ng-click="openMenu($mdMenu, $event)">
+                        <md-icon id="btnMisDatos" class="ng-scope" role="img" aria-hidden="true">
+                            <i class="material-icons">person_pin</i>
+                        </md-icon>
+                        {{nombreUsuario | limitTo: 9}}
+                        <span ng-if="nombreUsuario.length > 9">...</span>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="verMisDatos()">
+                                <md-icon><i class="material-icons">person_pin</i></md-icon>
+                                Mis Datos
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="cambiarMiPassword()">
+                                <md-icon><i class="material-icons">vpn_key</i></md-icon>
+                                Cambiar mi Contraseña
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="verMisAccesos()">
+                                <md-icon><i class="material-icons">open_in_browser</i></md-icon>
+                                Ver Mis Accesos
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider ng-show="showTour();"></md-menu-divider>
+                        <md-menu-item ng-show="showTour();">
+                            <md-button ng-click="inciarPaseoGuiado()">
+                                <md-icon><i class="material-icons">help_outline</i></md-icon>
+                                Iniciar Paseo Guiado
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button ng-click="goto('logout')">
+                                <md-icon><i class="material-icons">exit_to_app</i></md-icon>
+                                Cerrar Sesión
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-toolbar>
+
+            <md-content ng-class="login? 'main-content-big' : 'main-content'" id="content" ng-view></md-content>
+        </div>
+
+        <!-- Controllers -->
+        <script src="controllers/login.controller.js"></script>
+        <script src="controllers/logout.controller.js"></script>
+        <script src="controllers/home.eds.controller.js"></script>
+        <script src="controllers/home.controller.js"></script>
+        <script src="controllers/fax.controller.js"></script>
+        <script src="controllers/empresa.controller.js"></script>
+        <script src="controllers/voice_mail.controller.js"></script>
+        <script src="controllers/departamento.controller.js"></script>
+        <script src="controllers/persona.controller.js"></script>
+        <script src="controllers/usuario.controller.js"></script>
+        <script src="controllers/bandas_horarias.controller.js"></script>
+        <script src="controllers/parametro.controller.js"></script>
+        <script src="controllers/feriado.controller.js"></script>
+        <script src="controllers/session_expired.controller.js"></script>
+        <script src="controllers/estadistica.controller.js"></script>
+        <script src="controllers/archivo.controller.js"></script>
+        <script src="controllers/domain.controller.js"></script>
+
+        <!-- Services -->
+        <script src="services/utils.service.js"></script>
+        <script src="services/login.service.js"></script>
+        <script src="services/empresa.service.js"></script>
+        <script src="services/usuario.factory.js"></script>
+        <script src="services/fax.service.js"></script>
+        <script src="services/voice_mail.service.js"></script>
+        <script src="services/departamento.service.js"></script>
+        <script src="services/parametro.service.js"></script>
+        <script src="services/persona.service.js"></script>
+        <script src="services/usuario.service.js"></script>
+        <script src="services/estadistica.service.js"></script>
+        <script src="services/check.service.js"></script>
+        <script src="services/domain.service.js"></script>
+    </body>
+</html>

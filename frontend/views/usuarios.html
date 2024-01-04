@@ -1,0 +1,185 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">Usuarios {{labelTituloUsuarios}}</span>
+            </p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+            <md-tab label="Búsqueda">
+                <md-content class="tab-busqueda">
+                    <div class="tab-contenido">
+                        <md-autocomplete
+                                md-no-cache="false"
+                                md-selected-item="selectedItem"
+                                md-search-text-change="searchTextChange(ctrl.searchText)"
+                                md-search-text="searchText"
+                                md-selected-item-change="selectedItemChange(item)"
+                                md-items="item in querySearch(searchText)"
+                                md-item-text="item.display"
+                                md-min-length="0"
+                                placeholder="Buscar por nombre completo o de usuario...">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No se encontraron resultados.
+                            </md-not-found>
+                        </md-autocomplete>
+                        <br/>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Usuario Seleccionado" ng-disabled="!idSeleccionado">
+                <md-content class="tab-busqueda-resultado" style="height: 110px">
+                    <span ng-click="hidePreview()" class="close-preview"><i class="material-icons">close</i></span>
+                    <div class="tab-contenido">
+                        <div layout="row" layout-wrap layout-xs="column" class="md-dialog-content" style="margin-left: 10px;">
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">ID</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly ng-value="itemSeleccionado.id">
+                                </md-input-container>
+                            </div>
+                            <div flex="75">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Perfil</label>
+                                    <input style="width: 97.7% !important;" class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.profile">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Nombre de Usuario</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.nombreUsuario">
+                                </md-input-container>
+                            </div>
+                            <div flex="75">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Nombre Completo</label>
+                                    <input style="width: 97.7% !important;" class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.fullName">
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+
+    <div layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th sortable="nombreUsuario" class="sortable vaa-grid-title">
+                                    <span>Nombre de Usuario</span>
+                                </th>
+                                <th sortable="fullName" class="sortable vaa-grid-title">
+                                    <span>Nombre Completo</span>
+                                </th>
+                                <th sortable="profile" class="sortable vaa-grid-title">
+                                    <span>Perfil</span>
+                                </th>
+                                <th sortable="actvive" class="sortable vaa-grid-title">
+                                    <span>Habilitado</span>
+                                </th>
+                                <th>
+                                    <span></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-keydown="key($event)" context-menu="menuOptions" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="isSelected(item)? 'item-seleccionado' : ''">
+                                <td class="vaa-grid-value" ng-bind="item.nombreUsuario"></td>
+                                <td class="vaa-grid-value" ng-bind="item.fullName"></td>
+                                <td class="vaa-grid-value" ng-bind="item.profile"></td>
+                                <td class="vaa-grid-value">
+                                    <i ng-if="item.active == '1'" class="material-icons material-icons-check">check</i>
+                                </td>
+                                <td class="vaa-grid-value-context-menu">
+                                    <md-menu>
+                                        <md-button class="md-icon-button" aria-label="More" ng-click="openMenu($mdMenu, $event)">
+                                            <i class="material-icons">more_vert</i>
+                                        </md-button>
+                                        <md-menu-content width="2">
+                                            <md-menu-item>
+                                                <md-button ng-click="editarUsuario(item)">
+                                                    <md-icon><i class="material-icons">mode_edit</i></md-icon>
+                                                    Editar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item ng-if="item.active == '1'">
+                                                <md-button ng-click="deshabilitarUsuario(item)">
+                                                    <md-icon><i class="material-icons">cancel</i></md-icon>
+                                                    Deshabilitar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item ng-if="item.active == '0'">
+                                                <md-button ng-click="habilitarUsuario(item)">
+                                                    <md-icon><i class="material-icons">check_circle</i></md-icon>
+                                                    Habilitar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="eliminarUsuario(item)">
+                                                    <md-icon><i class="material-icons">delete</i></md-icon>
+                                                    Eliminar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="setPassword(item)">
+                                                    <md-icon><i class="material-icons">vpn_key</i></md-icon>
+                                                    Cambiar Contraseña
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-divider></md-divider>
+                                            <md-menu-item>
+                                                <md-button ng-click="verHistorial(item)">
+                                                    <md-icon><i class="material-icons">history</i></md-icon>
+                                                    Ver Historial de Cambios
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="verAccesos(item)">
+                                                    <md-icon><i class="material-icons">open_in_browser</i></md-icon>
+                                                    Ver Accesos del Usuario
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-show="!gridOptions.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <div class="lock-size" layout="row" layout-align="right bottom">
+        <md-fab-speed-dial>
+            <md-fab-trigger>
+                <md-button ng-click="crearUsuario()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                    <md-tooltip md-direction="top">
+                        Nuevo Usuario
+                    </md-tooltip>
+                    add
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

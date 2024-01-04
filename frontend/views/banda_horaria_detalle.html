@@ -1,0 +1,35 @@
+<md-dialog aria-label="Selector de modo de franja horaria">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-select-container">
+                    <label>Modo de Operación en el Intervalo Seleccionado</label>
+                    <md-select ng-model="ban_opm_code">
+                        <md-option ng-repeat="item in operationModes" ng-value="item.opm_code">{{item.opm_code}}</md-option>
+                    </md-select>
+                </md-input-container>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="eliminar()" ng-show="puedeEliminar">
+                Eliminar
+            </md-button>
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

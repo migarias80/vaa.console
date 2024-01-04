@@ -1,0 +1,11 @@
+## VAA
+
+# Armado de entorno
+1. Descargar composer
+2. Descargar git y tortoisegit
+
+# Configuracion
+En la raiz crear la carpeta config con:
+ConfigDB.ini
+log4php_error.xml o log4php_debug.xml
+Properties.php

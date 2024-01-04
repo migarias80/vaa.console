@@ -1,0 +1,834 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">{{plantilla}}Parámetros</span>
+            </p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-center-tabs="false" md-align-tabs="top">
+            <md-tab label="{{tabs[0].label}}" md-on-select="tabs[0].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[0].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex>
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" class="vaa-input" layout="row">
+                                <label class="label-generic">Número de la Operadora Diurna</label>
+                                <input class="input-generic" type="text" ng-model="parametros['OPERATOR_EXT_DAY'].par_value" maxlength="100" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                            </md-input-container>
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" class="vaa-input" layout="row">
+                                <label class="label-generic">Número de la Operadora Inglés Diurna</label>
+                                <input class="input-generic" type="text" ng-model="parametros['ENGLISH_OPERATOR_EXT_DAY'].par_value" maxlength="100" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cant. Máx. de Retornos al Menú Principal Diurno</label>
+                                <input class="input-generic" type="text" ng-model="parametros['PPAL_MENU_RETURNS_QTY_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cant. Mínima de Dígitos de Interno</label>
+                                <input class="input-generic" type="text" ng-model="parametros['EXT_DIGITS_MIN_QTY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Habilita Reproducción de Número de Interno para Guia Interna</label>
+                                <md-select ng-model="parametros['GI_ALLOW_PLAYBACK_INT_NUMBER'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Transferencia a Internos Fuera de la Guia Interna</label>
+                                <md-select ng-model="parametros['ALLOW_OUT_TRANSFERENCE_GI'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cant. Máx. de Informaciones de Ayuda</label>
+                                <input class="input-generic" type="text" ng-model="parametros['HELP_INFO_MAX_QTY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                        </div>
+                        <div flex>
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" class="vaa-input" layout="row">
+                                <label class="label-generic">Número de la Operadora Nocturna</label>
+                                <input class="input-generic" type="text" ng-model="parametros['OPERATOR_EXT_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                            </md-input-container>
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" class="vaa-input" layout="row">
+                                <label class="label-generic">Número de la Operadora Inglés Nocturna</label>
+                                <input class="input-generic" type="text" ng-model="parametros['ENGLISH_OPERATOR_EXT_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cant. Máx. de Retornos al Menú Principal Nocturno</label>
+                                <input class="input-generic" type="text" ng-model="parametros['PPAL_MENU_RETURNS_QTY_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Cant. Máxima de Dígitos de Interno</label>
+                                <input class="input-generic" type="text" ng-model="parametros['EXT_DIGITS_MAX_QTY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Habilita Reproducción de Número de Interno para Guía Externa</label>
+                                <md-select ng-model="parametros['GE_ALLOW_PLAYBACK_INT_NUMBER'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{::item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Permitir transferencia a Internos Fuera de la Guía Externa</label>
+                                <md-select ng-model="parametros['ALLOW_OUT_TRANSFERENCE_GE'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" class="md-select-container" style="width: 89%; margin-bottom: 12px !important;">
+                                <label>Selección del Modo de TTS</label>
+                                <md-select ng-model="tts_mode" ng-change="setTTSMode(tts_mode)">
+                                    <md-option ng-repeat="item in opcionesTTS track by $index" ng-value="item.value">{{::item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container ng-show="!ocultarParametrosEspecificosDeUnaEmpresa && modoOperacionConsola=='MONO'" class="vaa-input" layout="row">
+                                <label class="label-generic">Directorio de los Archivos de Sonido</label>
+                                <input class="input-generic" type="text" ng-model="parametros['VOX_DIRECTORY'].par_value" maxlength="100">
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab label="{{tabs[1].label}}" md-on-select="tabs[1].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[1].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora</label>
+                                <md-select ng-model="parametros['GI_ALLOW_SHORTCUT_DTMF_OP1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Silencio</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_SILENCE_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error Voz</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_ERR_DETECT_VOICE_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error DTMF</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_ERROR_OPTION_DTMF_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="md-select-container" style="margin-top: 18px !important;">
+                                <label>Acción 1</label>
+                                <md-select ng-model="parametros['GI_ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 1</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 1</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora Inglés</label>
+                                <md-select ng-model="parametros['GI_ALLOW_SHORTCUT_DTMF_OP2_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Silencio</label>
+                                <md-select ng-model="parametros['GI_ACTION_SILENCE_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error Voz</label>
+                                <md-select ng-model="parametros['GI_ACTION_ERROR_VOICE_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error DTMF</label>
+                                <md-select ng-model="parametros['GI_ACTION_ERROR_DTMF_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <!-- VACIO -->
+                            
+                            <md-input-container style="margin-top: 82px !important;" class="md-select-container">
+                                <label>Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_ACTION_2_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_ACTION_3_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container> 
+
+                            <!-- VACIO -->
+
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_2_BUSY_DAY'].par_value">
+                                        <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>   
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_3_BUSY_DAY'].par_value">
+                                        <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container> 
+                            
+                            <!-- VACIO -->
+
+                            <md-input-container style="margin-top: 83px !important;" class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_2_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_3_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>                        
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab label="{{tabs[2].label}}" md-on-select="tabs[2].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[2].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora</label>
+                                <md-select ng-model="parametros['GI_ALLOW_SHORT_DTMF_OP1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Silencio</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_SILENCE_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error DTMF</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_ERROR_OPT_DTMF_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error Voz</label>
+                                <input class="input-generic" type="text" ng-model="parametros['GI_RETRY_ERR_DETEC_VOICE_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            
+                            <md-input-container class="md-select-container">
+                                <label>Acción 1</label>
+                                <md-select ng-model="parametros['GI_ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_ACTION_2_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_3_NO_ASW_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 1</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_2_NO_ASW_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_3_NO_ASW_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 1</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_2_NO_ASW_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_3_NO_ASW_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora Inglés</label>
+                                <md-select ng-model="parametros['GI_ALLOW_SHORT_DTMF_OP2_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Silencio</label>
+                                <md-select ng-model="parametros['GI_ACTION_SILENCE_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error DTMF</label>
+                                <md-select ng-model="parametros['GI_ACTION_ERROR_DTMF_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error Voz</label>
+                                <md-select ng-model="parametros['GI_ACTION_ERROR_VOICE_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <!-- VACIO -->
+                            
+                            <md-input-container style="margin-top: 82px !important;" class="md-select-container">
+                                <label>Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                                
+                            <!-- VACIO -->
+
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_SEC_ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <!-- VACIO -->
+                            
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['GI_CEL_ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab label="{{tabs[3].label}}" md-on-select="tabs[3].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[3].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora</label>
+                                <md-select ng-model="parametros['ALLOW_SHORTCUT_DTMF_OPER1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Silencio</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_SILENCE_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error DTMF</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_ERROR_OPTION_DTMF_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error Voz</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_ERROR_DETECT_VOICE_DAY'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 1</label>
+                                <md-select ng-model="parametros['ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 1</label>
+                                <md-select ng-model="parametros['SEC_ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['SEC_ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['SEC_ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 1</label>
+                                <md-select ng-model="parametros['CEL_ACTION_1_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['CEL_ACTION_2_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['CEL_ACTION_3_NO_ANSWER_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora Inglés</label>
+                                <md-select ng-model="parametros['ALLOW_SHORTCUT_DTMF_OPER2_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Silencio</label>
+                                <md-select ng-model="parametros['ACTION_SILENCE_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error DTMF</label>
+                                <md-select ng-model="parametros['ACTION_ERROR_DTMF_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>                                    
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error Voz</label>
+                                <md-select ng-model="parametros['ACTION_ERROR_VOICE_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <!-- VACIO -->
+                            
+                            <md-input-container style="margin-top: 82px !important;" class="md-select-container">
+                                <label>Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['ACTION_2_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['ACTION_3_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <!-- VACIO -->
+
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['SEC_ACTION_2_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['SEC_ACTION_3_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <!-- VACIO -->
+
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['CEL_ACTION_2_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['CEL_ACTION_3_BUSY_DAY'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab label="{{tabs[4].label}}" md-on-select="tabs[4].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[4].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora</label>
+                                <md-select ng-model="parametros['ALLOW_SHORTCUT_DTMF_OP1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Silencio</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_SILENCE_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error DTMF</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_ERROR_OPTION_DTMF_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container style="margin-top: 30px !important;" class="vaa-input" layout="row">
+                                <label class="label-generic">Reintentos por Error Voz</label>
+                                <input class="input-generic" type="text" ng-model="parametros['RETRY_ERROR_DETECT_VOICE_NIGHT'].par_value" maxlength="100" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 1</label>
+                                <md-select ng-model="parametros['ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['ACTION_2_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['ACTION_3_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 1</label>
+                                <md-select ng-model="parametros['SEC_ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['SEC_ACTION_2_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['SEC_ACTION_3_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 1</label>
+                                <md-select ng-model="parametros['CEL_ACTION_1_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 No Contesta</label>
+                                <md-select ng-model="parametros['CEL_ACTION_2_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 No Contesta</label>
+                                <md-select ng-model="parametros['CEL_ACTION_3_NO_ANSWER_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>  
+                        </div>
+                        <div flex class="flex">
+                            <md-input-container class="md-select-container">
+                                <label>Permitir Shortcut de DTMF Operadora Inglés</label>
+                                <md-select ng-model="parametros['ALLOW_SHORTCUT_DTMF_OP2_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Silencio</label>
+                                <md-select ng-model="parametros['ACTION_SILENCE_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error DTMF</label>
+                                <md-select ng-model="parametros['ACTION_ERROR_DTMF_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción por Error Voz</label>
+                                <md-select ng-model="parametros['ACTION_ERROR_VOICE_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: 5} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                           
+				            <!-- VACIO --> 
+                            
+                            <md-input-container style="margin-top: 82px !important;" class="md-select-container">
+                                <label>Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <!-- VACIO --> 
+                            
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Asistente: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['SEC_ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Asistente: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['SEC_ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            
+                            <!-- VACIO -->
+                           
+                            <md-input-container style="margin-top: 85px !important;" class="md-select-container">
+                                <label>Celular: Acción 2 Si Acción 1 Ocupado</label>
+                                <md-select ng-model="parametros['CEL_ACTION_2_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Celular: Acción 3 Si Acción 2 Ocupado</label>
+                                <md-select ng-model="parametros['CEL_ACTION_3_BUSY_NIGHT'].par_value">
+                                    <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab label="{{tabs[5].label}}" md-on-select="tabs[5].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[5].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Horario Inicial Mañana</label>
+                                <input class="input-generic" type="text" ng-model="parametros['DAY_START_HOUR'].par_value" maxlength="8" ng-pattern-restrict="^(\d|\:)+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Horario Inicial Tarde</label>
+                                <input class="input-generic" type="text" ng-model="parametros['NOON_START_HOUR'].par_value" maxlength="8" ng-pattern-restrict="^(\d|\:)+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row">
+                                <label class="label-generic">Horario Inicial Noche</label>
+                                <input class="input-generic" type="text" ng-model="parametros['NIGHT_START_HOUR'].par_value" maxlength="8" ng-pattern-restrict="^(\d|\:)+$">
+                            </md-input-container>
+                        </div>
+                        <div flex>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab ng-if="!ocultarParametrosEspecificosDeUnaEmpresa" label="{{tabs[6].label}}" md-on-select="tabs[6].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[6].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex>
+                            <md-input-container class="md-select-container">
+                                <label>Fax Diurno Principal</label>
+                                <md-select ng-model="parametros['FAX_DAY'].par_value">
+                                    <!-- <md-option ng-repeat="item in queryValidation[getQueryId('FAX_DAY') - 1].data track by $index" ng-value="item.value">{{::item.desc}}</md-option> -->
+                                    <md-option ng-value=""><em>Ninguno</em></md-option>
+                                    <md-option ng-repeat="item in faxes | filter:{fax_enabled_daytime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Fax Nocturno Principal</label>
+                                <md-select ng-model="parametros['FAX_NIGHT'].par_value">
+                                    <md-option ng-value=""><em>Ninguno</em></md-option>
+                                    <md-option ng-repeat="item in faxes | filter:{fax_enabled_nighttime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Detección de Fax Entrante</label>
+                                <md-select ng-model="parametros['IN_FAX_DETECTION'].par_value">
+                                    <md-option ng-repeat="item in opcionesSiNo track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab ng-if="!ocultarParametrosEspecificosDeUnaEmpresa" label="{{tabs[7].label}}" md-on-select="tabs[7].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-if="tabs[7].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex>
+                            <md-input-container class="md-select-container">
+                                <label>Voice Mail Diurno Principal</label>
+                                <md-select ng-model="parametros['VOICE_MAIL_DAY'].par_value">
+                                    <md-option ng-value=""><em>Ninguno</em></md-option>
+                                    <md-option ng-repeat="item in vma | filter:{vma_enabled_daytime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Voice Mail Nocturno Principal</label>
+                                <md-select ng-model="parametros['VOICE_MAIL_NIGHT'].par_value">
+                                    <md-option ng-value=""><em>Ninguno</em></md-option>
+                                    <md-option ng-repeat="item in vma | filter:{vma_enabled_nighttime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+            <md-tab ng-show="!ocultarParametrosEspecificosDeUnaEmpresa" label="{{tabs[8].label}}" md-on-select="tabs[8].contenidoVisible=true" ng-disabled="cargando">
+                <md-content class="md-content-parametros" ng-show="tabs[8].contenidoVisible">
+
+                    <div layout="row" layout-xs="column" class="row">
+                        <div flex>
+                            <md-input-container class="md-select-container">
+                                <label>Modo de Operación</label>
+                                <md-select ng-model="automaticMode">
+                                    <md-option ng-repeat="item in opcionesAM track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-select-container">
+                                <label>Modo Manual</label>
+                                <md-select ng-model="parametros['MANUAL_OPERATION_MODE'].par_value" ng-disabled="evalSelectModoManual()">
+                                    <md-option ng-repeat="item in opcionesOM track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex>
+                        </div>
+                    </div>
+
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+
+    <div class="md-tab-buttons" style="margin-left: 21px; margin-top: 10px; margin-bottom: 10px;">
+        <md-button ng-disabled="cargando || guardando" style="margin-left: 0 !important;" ng-click="modificarParametros()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Guardar</md-button>
+    </div>
+</div>
+<md-progress-linear ng-if="cargando || guardando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

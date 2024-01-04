@@ -1,0 +1,26 @@
+<div class="seccion">
+
+    <h1 class="login-logo"><span class="hide">EDS</span><img ng-src="{{logoEmpresaLogin}}"></h1>
+
+    <div class="form-login-container">
+        <h2>Acceder</h2>
+        <md-input-container class="vaa-input">
+            <label class="label-login">Nombre</label>
+            <input class="input-login" type="text" ng-model="nombre" maxlength="20">
+        </md-input-container>
+        <md-input-container class="vaa-input">
+            <label class="label-login">Contraseña</label>
+            <input ng-keypress="($event.which === 13)? login():0" class="input-login" type="password" ng-model="password" maxlength="20">
+        </md-input-container>
+        <p class="text-center" style="margin-top: 20px;">
+            <md-button ng-click="login()"
+                       ng-disabled="cargando"
+                       class="vaa-md-raised"
+                       ng-class="getLoginButtonClass()">
+                Entrar
+            </md-button>
+        </p>
+        <!--<p class="text-center" style="margin-top: 10px;"><span class="lost-password pointer-underline">Olvidé mi contraseña</span></p>-->
+    </div>
+</div>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClassLogin()" md-mode="indeterminate" style="top:0px; position:absolute;">

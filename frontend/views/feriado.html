@@ -1,0 +1,38 @@
+<md-dialog aria-label="Nueva empresa" class="add-edit-dialog-medium">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content">
+                <div flex>
+                    <md-input-container class="vaa-input" layout="row">
+                        <label class="label-generic">Descripci&oacute;n</label>
+                        <input class="input-generic" type="text" required ng-model="hol_description" maxlength="50">
+                    </md-input-container>
+                    <md-input-container style="margin-left: -15px !important;">
+                        <!--<label class="label-generic">Fecha</label>-->
+                        <!--<md-datepicker ng-model="hol_date" name="dateField"></md-datepicker>-->
+                        <md-datepicker class="example-full-width" ng-model="hol_date" md-placeholder="Fecha"></md-datepicker>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

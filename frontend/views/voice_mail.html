@@ -1,0 +1,58 @@
+<md-dialog aria-label="Nuevo voice mail" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content">
+                <div flex>
+                    <md-input-container class="vaa-input" layout="row">
+                        <label class="label-generic">Descripción</label>
+                        <input class="input-generic" type="text" required ng-model="vma_description" maxlength="100">
+                    </md-input-container>
+                    <md-input-container class="vaa-input" layout="row">
+                        <label class="label-generic">Número de Interno</label>
+                        <input class="input-generic" type="text" required ng-model="vma_internal_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                    </md-input-container>
+
+                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="vma_allow_dial_post" aria-label="Checkbox 1">
+                        <span class="label-generic"> Permite Post-discado</span>
+                    </md-checkbox>
+                    <md-input-container class="vaa-input" layout="row" ng-class="vma_allow_dial_post? '' : 'input-generic-disabled'">
+                        <label class="label-generic">Número Posterior</label>
+                        <input ng-disabled="!vma_allow_dial_post" class="input-generic" type="text" ng-model="vma_default_dialed_number" maxlength="100" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                    </md-input-container>
+                    <md-input-container class="vaa-input" layout="row" ng-class="vma_allow_dial_post? '' : 'input-generic-disabled'">
+                        <label class="label-generic">Número por Omisión</label>
+                        <input ng-disabled="!vma_allow_dial_post" class="input-generic" type="text" ng-model="vma_digits" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                    </md-input-container>
+                </div>
+                <div flex>
+                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="vma_enabled_daytime" aria-label="Checkbox 1">
+                        <span class="label-generic"> Habilitado Diurno</span>
+                    </md-checkbox>
+                    <md-checkbox style="margin-top: 35px;" layout="row" ng-class="getCheckboxClass()" ng-model="vma_enabled_nighttime" aria-label="Checkbox 1">
+                        <span class="label-generic"> Habilitado Nocturno</span>
+                    </md-checkbox>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

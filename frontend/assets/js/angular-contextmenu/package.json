@@ -1,0 +1,51 @@
+{
+  "name": "angular-contextmenu",
+  "description": "a contextmenu helper service for angular & bootstrap",
+  "main": "dist/contextmenu.js",
+  "version": "0.0.0-dev",
+  "scripts": {
+    "prepublish": "npm run build",
+    "test": "karma start karma.conf.js --single-run",
+    "test-travis": "karma start karma.conf.js --single-run --browsers PhantomJS",
+    "build": "npm run less && npm run browserify",
+    "watch:build": "watchify src/index.js -o dist/contextmenu.js -v",
+    "browserify": "browserify src/index.js --standalone ng-contextmenu | derequire > dist/contextmenu.js",
+    "less": "lessc style/contextmenu.less > dist/style.css",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "install-scope": "TEST_SCOPE=${TEST_SCOPE:-1.6} npm install angular@$TEST_SCOPE angular-mocks@$TEST_SCOPE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ds82/angular-contextmenu.git"
+  },
+  "keywords": [
+    "ng",
+    "angular",
+    "twbs",
+    "bootstrap",
+    "contextmenu"
+  ],
+  "author": "Dennis Sänger <npm.ng-contextmenu.15@mail.ds82.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ds82/angular-contextmenu/issues"
+  },
+  "homepage": "https://github.com/ds82/angular-contextmenu",
+  "devDependencies": {
+    "browserify": "14.3.0",
+    "derequire": "2.0.6",
+    "jasmine-core": "2.6.1",
+    "jquery": "3.2.1",
+    "karma": "1.7.0",
+    "karma-browserify": "5.1.1",
+    "karma-chrome-launcher": "2.1.1",
+    "karma-cli": "1.0.1",
+    "karma-firefox-launcher": "1.0.1",
+    "karma-jasmine": "1.1.0",
+    "karma-phantomjs-launcher": "1.0.4",
+    "less": "2.7.2",
+    "semantic-release": "6.3.6",
+    "watchify": "3.9.0"
+  },
+  "dependencies": {}
+}

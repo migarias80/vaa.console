@@ -1,0 +1,213 @@
+<div class="seccion">
+    <div class="welcome" ng-class="getWelcomeBarClass()">
+        <div class="welcome-text">
+            <p><span class="md-headline">{{nombreUsuario}} @ {{nombreEmpresa}}</span></p>
+            <p><span class="md-subhead">{{lastAccess}}</span></p>
+        </div>
+    </div>
+
+    <!-- ----------- -->
+    <!-- --- EDS --- -->
+    <!-- ----------- -->
+    <div ng-show="puedeConfigurarParametros">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top" class="tab-contenedor">
+            
+            <md-tab label="General">
+                <md-content class="tab-general listado-iconos" style="padding: 8px 0px 8px 0px;">
+
+                    <!-- VAA Activado -->
+                    <div layout="row" layout-xs="column" class="row" style="padding: 0 10px 0 20px; margin-bottom: -5px;">
+                        <div flex="33">
+                            <md-switch ng-change="modificarVAAActivado()" ng-disabled="!habilitarActivarEmpresa" ng-model="cfg_vaa_active.par_value_boolean" aria-label="VAA activado" class="md-switch-eds" style="width: 500px;">
+                                <span style="font-size: 16px; color: #333;">VAA Habilitado para {{nombreEmpresa | limitTo: 37}}</span><span ng-if="nombreEmpresa.length > 37">...</span>
+                            </md-switch>
+                        </div>
+                        <div flex> </div>
+                    </div>
+
+                    <div layout="row" layout-xs="column" class="row" style="padding: 0 10px 0 20px;">
+                        <div flex="33">
+                            <md-input-container class="vaa-input" layout="row" style="margin-top: 10px; margin-bottom: 30px !important;">
+                                <label class="label-generic">Regex para Activación por DNIS - Guía Interna</label>
+                                <input ng-blur="evalHabilitarEmpresa()" ng-change="isExpresionRegularDNISValid()" class="input-generic" type="text" ng-model="empresa.dnis_regex" maxlength="1024">
+                                <i ng-if="expresionRegularDNISValid && empresa.dnis_regex" class="material-icons input-icon input-icon-not-hover">check</i>
+                                <i ng-if="!expresionRegularDNISValid" class="material-icons input-icon input-icon-not-hover">error</i>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row" style="margin-bottom: 30px !important;">
+                                <label class="label-generic">Regex para Activación por DNIS - Guía Externa</label>
+                                <input ng-blur="evalHabilitarEmpresa()" ng-change="isExpresionRegularDNIS_ExtValid()" class="input-generic" type="text" ng-model="empresa.dnis_regex_ext" maxlength="1024">
+                                <i ng-if="expresionRegularDNIS_ExtValid && empresa.dnis_regex_ext" class="material-icons input-icon input-icon-not-hover">check</i>
+                                <i ng-if="!expresionRegularDNIS_ExtValid" class="material-icons input-icon input-icon-not-hover">error</i>
+                            </md-input-container>
+
+                            <md-input-container ng-show="rutasMHC.length == 0" class="vaa-input" layout="row" style="margin-bottom: 15px !important;">
+                                <label class="label-generic">Ruta para Llamadas Salientes</label>
+                                <input ng-blur="evalHabilitarEmpresa()" class="input-generic" type="text" ng-model="empresa.output_route" maxlength="128">
+                            </md-input-container>
+                            <md-input-container ng-show="rutasMHC.length > 0" class="md-select-container" style="margin-top: 6px !important; width: 88%;">
+                                <label>Ruta para Llamadas Salientes</label>
+                                <md-select ng-model="empresa.output_route">
+                                    <md-option ng-repeat="item in rutasMHC track by $index" ng-value="item.value">{{item.label}}</md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="vaa-input" layout="row" style="margin-bottom: 30px !important;">
+                                <label class="label-generic">Cantidad de Líneas Entrantes Asignadas</label>
+                                <input ng-blur="evalHabilitarEmpresa()" class="input-generic" type="text" ng-model="cfg_max_lines" maxlength="5" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row" style="margin-bottom: 30px !important;">
+                                <label class="label-generic">Cantidad Máxima de Personas</label>
+                                <input ng-blur="evalHabilitarEmpresa()" class="input-generic" type="text" ng-model="cfg_max_phone_books" maxlength="5" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row" style="margin-bottom: 30px !important;">
+                                <label class="label-generic">Cantidad Máxima de Departamentos</label>
+                                <input ng-blur="evalHabilitarEmpresa()" class="input-generic" type="text" ng-model="cfg_max_departments" maxlength="5" ng-pattern-restrict="^\d+$">
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row" style="margin-bottom: 25px !important;">
+                                <md-button ng-disabled="cargando || guardando" style="margin-left: 0 !important;" ng-click="guardarEmpresa()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Guardar</md-button>
+                            </md-input-container>
+                        </div>
+                        <div flex="100" style="margin-top: -18px;">
+                            <div layout="row" layout-xs="column" class="row">
+                                <div flex="50">
+                                    <div class="chart-content">
+                                        <div class="chart-pie-content">
+                                            <canvas id="pie"
+                                                    class="chart chart-pie"
+                                                    chart-data="personas_data"
+                                                    chart-labels="personas_labels"
+                                                    chart-options="personas_options">
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div flex="50">
+                                    <div class="chart-content">
+                                        <div class="chart-pie-content">
+                                            <canvas id="pie2"
+                                                    class="chart chart-pie"
+                                                    chart-data="departamentos_data"
+                                                    chart-labels="departamentos_labels"
+                                                    chart-options="departamentos_options">
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <md-input-container class="vaa-input" layout="row" style="margin-top: 44px !important;">
+                                <label class="label-generic">Persona de Contacto</label>
+                                <input class="input-generic" type="text" ng-model="cfg_contact" maxlength="200">
+                            </md-input-container>
+                            <md-input-container class="vaa-input md-block">
+                                <label class="label-generic">Notas de la Empresa</label>
+                                <textarea style="width: 90%; max-height: 40px; overflow-y: auto;" ng-model="cfg_notes" md-maxlength="500" rows="2" md-select-on-focus></textarea>
+                            </md-input-container>
+                            <md-input-container class="vaa-input" layout="row" style="margin-top: 21px !important;">
+                                <aps-upload-file></aps-upload-file>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Dial Plan">
+                <md-content class="tab-general listado-iconos" style="padding: 8px 0px 8px 0px;">
+
+                    <div layout="column" layout-fill class="vaa-grid-container" style="height: 460px;">
+                        <md-content layout-padding layout="row" layout-align="center">
+                            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                                <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                                    <div>
+                                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                                            <thead>
+                                            <tr>
+                                                <th sortable="dom_regex" class="sortable vaa-grid-title">
+                                                    <span>Regex para el Número de Interno</span>
+                                                </th>
+                                                <th sortable="dom_domain" class="sortable vaa-grid-title">
+                                                    <span>IP/Dominio de la PABX</span>
+                                                </th>
+                                                <th sortable="dom_use_ani_ip_for_refer" class="sortable vaa-grid-title">
+                                                    <span>Usar la IP/Domino de la Llamada Entrante</span>
+                                                </th>
+                                                <th>
+                                                    <span></span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-keydown="key($event)" context-menu="menuOptions" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="isSelected(item)? 'item-seleccionado' : ''">
+                                                <td class="vaa-grid-value" ng-bind="item.dom_regex"></td>
+                                                <td class="vaa-grid-value" ng-bind="item.dom_domain"></td>
+                                                <td class="vaa-grid-value">
+                                                    <i ng-show="item.dom_use_ani_ip_for_refer == 1" class="material-icons material-icons-check">check</i>
+                                                </td>
+                                                <td class="vaa-grid-value-context-menu">
+                                                    <md-menu context-menu="menuOptions" context-menu-on="click">
+                                                        <i style="margin-top: 3px;" class="material-icons pointer">more_vert</i>
+                                                    </md-menu>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                                    <div class="watermark" ng-show="!gridOptions.data.length && !cargando">No se encontraron registros</div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </div>
+                    
+                    <div class="lock-size" layout="row" layout-align="right bottom">
+                        <md-fab-speed-dial>
+                            <md-fab-trigger>
+                                <md-button ng-click="crearDominio()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                                    <md-tooltip md-direction="top">
+                                        Nuevo Regex
+                                    </md-tooltip>
+                                    add
+                                </md-button>
+                            </md-fab-trigger>
+                        </md-fab-speed-dial>
+                    </div>
+
+                </md-content>
+            </md-tab>
+
+        </md-tabs>
+    </div>
+
+    <!-- --------------- -->
+    <!-- --- CLIENTE --- -->
+    <!-- --------------- -->
+    <div ng-if="puedeConfigurarParametrosDeLaEmpresa">
+
+         <!-- Soporte -->
+        <div flex-gt-sm="95" flex="" md-whiteframe="1" style="margin-top: 15px; margin-left: 15px;">
+            <div layout="row" class="md-tab-buttons" style="margin-left: 11px; margin-right: 11px; margin-top: 10px; padding-bottom: 18px;">
+                <div flex style="margin-top: 10px;">
+                    <p class="titulo-panel">Ayuda</p>
+                    <p class="parrafo-panel">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin semper ultricies turpis at hendrerit. Duis nec lorem sit amet orci efficitur semper. Proin pellentesque mi in ante consequat condimentum. Cras sed justo vitae quam iaculis gravida ac eget lacus. Integer molestie sollicitudin purus, sit amet rhoncus ipsum sagittis ac. Etiam at tellus lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum massa massa, dictum vel neque vitae, rutrum mattis sem. Mauris ut auctor nibh. Nullam consequat, nibh quis pharetra auctor, orci libero faucibus lacus, id mollis nibh libero id diam. Morbi feugiat mauris eget consectetur finibus. Nunc varius dapibus dui, convallis ullamcorper justo tristique id.</p>
+                    <p class="parrafo-panel">Etiam pharetra mi vitae augue imperdiet, et laoreet augue malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam ullamcorper finibus sem ut congue. Ut orci urna, pellentesque quis laoreet et, tincidunt sit amet enim. Etiam blandit ante interdum ornare aliquam. Sed rutrum ante luctus quam tincidunt, non ultrices ipsum blandit. Sed nec porta erat. Curabitur mauris eros, volutpat ac dolor hendrerit, porttitor porttitor nibh. Sed sit amet turpis velit. Praesent tortor felis, fringilla tincidunt mauris at, gravida gravida neque. Duis consequat orci at libero faucibus, id mollis lorem molestie. Nam dapibus pellentesque rutrum. Proin in placerat justo, et pretium orci. Cras facilisis pellentesque tortor, at aliquet massa ornare non. Donec dolor turpis, scelerisque non condimentum at, cursus quis felis.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo -->
+        <div flex-gt-sm="35" flex="" md-whiteframe="1" style="margin-top: 15px; margin-left: 15px;">
+            <md-content class="listado-iconos" style="padding: 8px 0px 8px 0px;">
+                <div layout="row" layout-xs="column" class="row" style="padding: 0 10px 0 10px; height: 85px;">
+                    <div>
+                        <md-input-container class="vaa-input" style="width: 100%; margin-top: 0px !important;">
+                            <aps-upload-file></aps-upload-file>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-content>
+        </div>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

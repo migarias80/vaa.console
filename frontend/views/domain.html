@@ -1,0 +1,42 @@
+<md-dialog aria-label="Nuevo regex" style="min-width: 345px;">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content">
+                <div flex>
+                    <md-input-container class="vaa-input" layout="row" style="margin-top: 10px;">
+                        <label class="label-generic">Regex para el Número de Interno</label>
+                        <input ng-disabled="dom_regex == 'DEFAULT'" ng-change="isExpresionRegularValid()" required class="input-generic" type="text" ng-model="dom_regex" maxlength="1024">
+                        <i ng-if="expresionRegularValid && dom_regex" class="material-icons input-icon input-icon-not-hover">check</i>
+                        <i ng-if="!expresionRegularValid" class="material-icons input-icon input-icon-not-hover">error</i>
+                    </md-input-container>
+                    <md-checkbox style="margin-top: 20px; margin-bottom: 23px;" layout="row" ng-show="dom_regex == 'DEFAULT'" ng-class="getCheckboxClass()" ng-model="dom_use_ani_ip_for_refer" aria-label="Checkbox 1">
+                        <span class="label-generic"> Usar la IP/Domino de la Llamada Entrante</span>
+                    </md-checkbox>
+                    <md-input-container class="vaa-input" layout="row" ng-class="!dom_use_ani_ip_for_refer? '' : 'input-generic-disabled'">
+                        <label class="label-generic">IP/Dominio de la PABX</label>
+                        <input ng-disabled="dom_use_ani_ip_for_refer == 1" class="input-generic" type="text" ng-model="dom_domain" maxlength="1024">
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

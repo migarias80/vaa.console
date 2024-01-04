@@ -1,0 +1,226 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">{{titulo}}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+            <md-tab label="Búsqueda">
+                <md-content class="tab-busqueda">
+                    <div class="tab-contenido">
+                        <md-datepicker class="example-full-width" ng-model="fecha_desde" md-placeholder="Fecha Desde"></md-datepicker>
+                        <md-datepicker class="example-full-width" ng-model="fecha_hasta" md-placeholder="Fecha Hasta"></md-datepicker>
+
+                        <md-button ng-if="puedeConsultarCantidadLlamadas" ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getLlamadas()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Cantidad de llamadas</md-button>
+                        <md-button ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getTroncales()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Tiempo de ocupación</md-button>
+                        <md-button ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getTroncalesMaximos()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Uso máximo de troncales</md-button>
+                        <br/>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div> -->
+
+    <md-content class="tab-busqueda" style="margin-top: 10px;">
+        <div class="tab-contenido">
+            <md-datepicker ng-change="fechaDesdeChange()" class="example-full-width" ng-model="fecha_desde" md-placeholder="Fecha Desde"></md-datepicker>
+            <md-datepicker ng-change="fechaHastaChange()" class="example-full-width" ng-model="fecha_hasta" md-placeholder="Fecha Hasta"></md-datepicker>
+
+            <md-button ng-if="puedeConsultarCantidadLlamadas" ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getLlamadas()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Cantidad de llamadas</md-button>
+            <md-button ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getTroncales()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Tiempo de ocupación</md-button>
+            <md-button ng-disabled="cargando" style="margin-left: 15px !important;" ng-click="getTroncalesMaximos()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">Uso máximo de troncales</md-button>
+            <br/>
+        </div>
+    </md-content>
+
+    <!-- -------------------- -->
+    <!-- Cantidad de llamadas -->
+    <!-- -------------------- -->
+    <div ng-if="showGridLlamadas && !cargando" class="conteiner-header-estadistica">
+        <p class="titulo-estadistica">Cantidad de Llamadas</p>
+        <md-button ng-if="gridOptionsLlamadas.data.length" style="margin-top: 20px;" ng-disabled="cargando" ng-click="exportToCsv('#tableCantidadDeLlamadas', 'Estad_Cantidad_Llamadas')" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+            <md-icon><i class="material-icons">file_download</i></md-icon>
+            Exportar
+        </md-button>
+    </div>
+    <div ng-if="showGridLlamadas && !cargando" layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptionsLlamadas" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-data-table-hover2 mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="tableCantidadDeLlamadas">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;" sortable="dar_date_value" class="sortable vaa-grid-title">
+                                        <span>Fecha</span>
+                                    </th>
+                                    <th style="width: 15%;" sortable="frd_id" class="sortable vaa-grid-title">
+                                        <span>Identificador de Variables</span>
+                                    </th>
+                                    <th style="width: 40%;" sortable="frd_description" class="sortable vaa-grid-title">
+                                        <span>Descripción</span>
+                                    </th>
+                                    <th style="width: 10%;" sortable="dar_value" class="sortable vaa-grid-title">
+                                        <span>Valor</span>
+                                    </th>
+                                    <th style="width: 18%;" sortable="frd_unit" class="sortable vaa-grid-title">
+                                        <span>Unidad</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-keydown="key($event)" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="getClassCantidadDeLlamadas(item)">
+                                    <td style="width: 15%;" class="vaa-grid-value" ng-bind="item.dar_date | date:'dd/MM/yyyy'"></td>
+                                    <td style="width: 15%;" class="vaa-grid-value" ng-bind="item.frd_id"></td>
+                                    <td style="width: 40%;" class="vaa-grid-value" ng-bind="item.frd_description"></td>
+                                    <td style="width: 13%;" class="vaa-grid-value" ng-bind="item.dar_value"></td>
+                                    <td style="width: 15%;" class="vaa-grid-value" ng-bind="item.frd_unit"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div ui-grid="gridOptionsLlamadas" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-show="!gridOptionsLlamadas.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <!-- ------------------- -->
+    <!-- Tiempo de ocupacion -->
+    <!-- ------------------- -->
+    <div ng-if="showGridTroncales && !cargando" class="conteiner-header-estadistica">
+        <p class="titulo-estadistica">Tiempo de Ocupación</p>
+        <md-button ng-if="gridOptionsTroncales.data.length" style="margin-top: 20px;" ng-disabled="cargando" ng-click="exportToCsv('#tableTiempoDeUsoPorTroncal', 'Estad_Tiempo_Ocupacion')" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+            <md-icon><i class="material-icons">file_download</i></md-icon>
+            Exportar
+        </md-button>
+    </div>
+    <div ng-if="showGridTroncales && !cargando" layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptionsTroncales" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-data-table-hover2 mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="tableTiempoDeUsoPorTroncal">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;" sortable="dar_date_value" class="sortable vaa-grid-title">
+                                        <span>Fecha</span>
+                                    </th>
+                                    <th style="width: 15%;" sortable="frd_id" class="sortable vaa-grid-title">
+                                        <span>Identificador de Variables</span>
+                                    </th>
+                                    <th style="width: 35%;" sortable="frd_description" class="sortable vaa-grid-title">
+                                        <span>Descripción</span>
+                                    </th>
+                                    <th style="width: 10%;" sortable="dar_value" class="sortable vaa-grid-title">
+                                        <span>Valor</span>
+                                    </th>
+                                    <th style="width: 9%;" sortable="frd_unit" class="sortable vaa-grid-title">
+                                        <span>Unidad</span>
+                                    </th>
+                                    <th style="width: 9%;" sortable="porcentaje_en_el_dia" class="sortable vaa-grid-title">
+                                        <span>Porc.</span>
+                                    </th>
+                                    <th style="width: 10%;">
+                                        <span></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-keydown="key($event)" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="getClassTiempoDeOcupacion(item)">
+                                    <td style="width: 15%;" class="vaa-grid-value" ng-bind="item.dar_date | date:'dd/MM/yyyy'"></td>
+                                    <td style="width: 15%;" class="vaa-grid-value" ng-bind="item.dar_date"></td>
+                                    <td style="width: 40%;" class="vaa-grid-value" ng-bind="item.frd_description"></td>
+                                    <td style="width: 13%;" class="vaa-grid-value" ng-bind="item.dar_value"></td>
+                                    <td style="width: 9%;" class="vaa-grid-value" ng-bind="item.frd_unit"></td>
+                                    <td style="width: 9%;" class="vaa-grid-value">{{item.porcentaje_en_el_dia}}%</td>
+                                    <td style="width: 10%;" class="vaa-grid-value-context-menu">
+                                        <md-menu no-exportable ng-show="item.mostrarBotonGrafico">
+                                            <md-button class="md-icon-button" aria-label="More" ng-click="verGraficoDetalleTroncal(item)">
+                                                <i style="color: #3c3c3c;" class="material-icons">assessment</i>
+                                            </md-button>
+                                        </md-menu>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div ui-grid="gridOptionsTroncales" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-show="!gridOptionsTroncales.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <!-- ----------------------- -->
+    <!-- Uso maximo de troncales -->
+    <!-- ----------------------- -->
+    <div ng-if="showGridTroncalesMaximos && !cargando" class="conteiner-header-estadistica">
+        <p class="titulo-estadistica">Uso Máximo de Troncales</p>
+        <md-button ng-if="gridOptionsTroncalesMaximos.data.length" style="margin-top: 20px;" ng-disabled="cargando" ng-click="exportToCsv('#tableMaximosTroncalesPorDia', 'Estad_Uso_Maximo_Troncales')" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+            <md-icon><i class="material-icons">file_download</i></md-icon>
+            Exportar
+        </md-button>
+        <md-button ng-if="gridOptionsTroncalesMaximos.data.length" style="margin-top: 20px;" ng-disabled="cargando" ng-click="verGraficoTroncalesMaximos()" class="md-raised md-primary" ng-class="getButtonClass()" aria-label="attach_file">
+            <md-icon><i class="material-icons">assessment</i></md-icon>
+            Ver gráfico
+        </md-button>
+    </div>
+    <div ng-if="showGridTroncalesMaximos && !cargando" layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptionsTroncalesMaximos" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-data-table-hover2 mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="tableMaximosTroncalesPorDia">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%;" sortable="dar_date_value" class="sortable vaa-grid-title">
+                                        <span>Fecha</span>
+                                    </th>
+                                    <th style="width: 50%;" sortable="frd_id" class="sortable vaa-grid-title">
+                                        <span>Uso Máximo de Troncales</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-keydown="key($event)" context-menu="menuOptions" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="getClassUsoMaximoDeTroncales(item)">
+                                    <td style="width: 40%;" class="vaa-grid-value" ng-bind="item.dar_date | date:'dd/MM/yyyy'"></td>
+                                    <td style="width: 50%;" class="vaa-grid-value" ng-bind="item.max_troncales_usadas"></td>
+                                    <!-- <td class="vaa-grid-value-context-menu">
+                                        <md-menu no-exportable>
+                                            <md-button class="md-icon-button" aria-label="More" ng-click="openMenu($mdMenu, $event); viewItem(item, true)">
+                                                <i class="material-icons">more_vert</i>
+                                            </md-button>
+                                            <md-menu-content width="2">
+                                                <md-menu-item>
+                                                    <md-button ng-click="verGraficoDetalleTroncal(item)">
+                                                        <md-icon><i class="material-icons">assessment</i></md-icon>
+                                                        Ver detalle
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div ui-grid="gridOptionsTroncalesMaximos" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-show="!gridOptionsTroncalesMaximos.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando || cargandoGrafico" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

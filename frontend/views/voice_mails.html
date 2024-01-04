@@ -1,0 +1,178 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">Voice mails</span>
+            </p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+            <md-tab label="Búsqueda" ng-click="hidePreview()">
+                <md-content class="tab-busqueda" ng-show="!cargando">
+                    <div class="tab-contenido">
+                        <md-autocomplete
+                                md-no-cache="false"
+                                md-selected-item="selectedItem"
+                                md-search-text-change="searchTextChange(ctrl.searchText)"
+                                md-search-text="searchText"
+                                md-selected-item-change="selectedItemChange(item)"
+                                md-items="item in querySearch(searchText)"
+                                md-item-text="item.display"
+                                md-min-length="0"
+                                placeholder="Buscar por descripcion o número de interno...">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No se encontraron resultados.
+                            </md-not-found>
+                        </md-autocomplete>
+                        <br/>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Voice Mail Seleccionado" ng-disabled="!idSeleccionado">
+                <md-content class="md-content-item-seleccionado-departamento tab-busqueda-resultado" style="height: 110px">
+                    <span ng-click="hidePreview()" class="close-preview"><i class="material-icons">close</i></span>
+                    <div class="tab-contenido">
+                        <div layout="row" layout-wrap layout-xs="column" class="md-dialog-content" style="margin-left: 10px;">
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">ID</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly ng-value="itemSeleccionado.vma_id">
+                                </md-input-container>
+                            </div>
+                            <div flex="40">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Descripción</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.vma_description">
+                                </md-input-container>
+                            </div>
+                            <div flex="35">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Número de Interno</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.vma_internal_number">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Habilitado Diurno</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly value="{{itemSeleccionado.vma_enabled_daytime? 'SI' : 'NO'}}">
+                                </md-input-container>
+                            </div>
+                            <div flex="40">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Habilitado Nocturno</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly value="{{itemSeleccionado.vma_enabled_nighttime? 'SI' : 'NO'}}">
+                                </md-input-container>
+                            </div>
+                            <div flex="35">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Permite Post-discado</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly value="{{itemSeleccionado.vma_allow_dial_post? 'SI' : 'NO'}}">
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+
+    <div layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th sortable="vma_description" class="sortable vaa-grid-title">
+                                    <span>Descripción</span>
+                                </th>
+                                <th sortable="vma_internal_number" class="sortable vaa-grid-title">
+                                    <span>Número de Interno</span>
+                                </th>
+                                <th sortable="vma_enabled_daytime" class="sortable vaa-grid-title">
+                                    <span>Habilitado Diurno</span>
+                                </th>
+                                <th sortable="vma_enabled_nighttime" class="sortable vaa-grid-title">
+                                    <span>Habilitado Nocturno</span>
+                                </th>
+                                <th sortable="vma_enabled_nighttime" class="sortable vaa-grid-title">
+                                    <span>Permite Post-discado</span>
+                                </th>
+                                <th>
+                                    <span></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-keydown="key($event)" context-menu="menuOptions" class="grid-con-acciones-onhover tr-datos" grid-item ng-click="viewItem(item)" ng-class="isSelected(item)? 'item-seleccionado' : ''">
+                                <td class="vaa-grid-value" ng-bind="item.vma_description"></td>
+                                <td class="vaa-grid-value" ng-bind="item.vma_internal_number"></td>
+                                <td class="vaa-grid-value">
+                                    <i ng-show="item.vma_enabled_daytime" class="material-icons material-icons-check">check</i>
+                                </td>
+                                <td class="vaa-grid-value">
+                                    <i ng-show="item.vma_enabled_nighttime" class="material-icons material-icons-check">check</i>
+                                </td>
+                                <td class="vaa-grid-value">
+                                    <i ng-show="item.vma_allow_dial_post" class="material-icons material-icons-check">check</i>
+                                </td>
+                                <td class="vaa-grid-value-context-menu">
+                                    <md-menu context-menu="menuOptions" context-menu-on="click">
+                                        <i style="margin-top: 3px;" class="material-icons pointer">more_vert</i>
+                                    </md-menu>
+                                    <!--
+                                    <md-menu>
+                                        <md-button class="md-icon-button" aria-label="More" ng-click="openMenu($mdMenu, $event); viewItem(item, true)">
+                                            <i class="material-icons">more_vert</i>
+                                        </md-button>
+                                        <md-menu-content width="2">
+                                            <md-menu-item>
+                                                <md-button ng-click="editarVMA(item)">
+                                                    <md-icon><i class="material-icons">mode_edit</i></md-icon>
+                                                    Editar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="eliminarVMA(item)">
+                                                    <md-icon><i class="material-icons">delete</i></md-icon>
+                                                    Eliminar
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                    -->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>       
+                </div>
+                <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-show="!gridOptions.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <div class="lock-size" layout="row" layout-align="right bottom">
+        <md-fab-speed-dial>
+            <md-fab-trigger>
+                <md-button ng-click="crearVMA()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                    <md-tooltip md-direction="top">
+                        Nuevo Voice Mail
+                    </md-tooltip>
+                    add
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+    </div>
+
+</div>

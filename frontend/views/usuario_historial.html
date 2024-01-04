@@ -1,0 +1,79 @@
+<md-dialog aria-label="Nueva empresa" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content" style="padding: 10px !important;">
+                <div flex>
+
+                    <div layout="column" layout-fill class="" style="padding: 0 !important;">
+                        <md-content layout-padding layout="row" layout-align="center">
+                            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                                <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                                    <div>
+                                        <table style="height: 356px;" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                                            <thead>
+                                                <tr>
+                                                    <th sortable="lastEditValue" class="sortable vaa-grid-title">
+                                                        <span>Fecha</span>
+                                                    </th>
+                                                    <th sortable="nombreUsuario" class="sortable vaa-grid-title">
+                                                        <span>Nombre de Usuario</span>
+                                                    </th>
+                                                    <th sortable="fullName" class="sortable vaa-grid-title">
+                                                        <span>Nombre Completo</span>
+                                                    </th>
+                                                    <th sortable="profile" class="sortable vaa-grid-title">
+                                                        <span>Perfil</span>
+                                                    </th>
+                                                    <th sortable="active" class="sortable vaa-grid-title">
+                                                        <span>Habilitado</span>
+                                                    </th>
+                                                    <th sortable="changePassword" class="sortable vaa-grid-title">
+                                                        <span>Cambió Contraseña</span>
+                                                    </th>
+                                                    <th sortable="lastEditUserName" class="sortable vaa-grid-title">
+                                                        <span>Usuario que Modificó</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="height: 286px;">
+                                                <tr ng-keydown="key($event)" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item)" ng-class="isSelected(item)? 'item-seleccionado' : ''">
+                                                    <td class="vaa-grid-value" ng-bind="item.lastEdit"></td>
+                                                    <td class="vaa-grid-value" ng-bind="item.nombreUsuario"></td>
+                                                    <td class="vaa-grid-value" ng-bind="item.fullName"></td>
+                                                    <td class="vaa-grid-value" ng-bind="item.profile"></td>
+                                                    <td class="vaa-grid-value">
+                                                        <i ng-show="item.active == 1" class="material-icons material-icons-check">check</i>
+                                                    </td>
+                                                    <td class="vaa-grid-value">
+                                                        <i ng-show="item.changePassword == 1" class="material-icons material-icons-check">check</i>
+                                                    </td>
+                                                    <td class="vaa-grid-value" ng-bind="item.lastEditUserName"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

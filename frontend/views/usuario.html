@@ -1,0 +1,52 @@
+<md-dialog aria-label="Nueva empresa">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="vaa-input" layout="row">
+                    <label class="label-login">Nombre de Usuario</label>
+                    <input style="width: 100% !important;" ng-disabled="!puedeEditarNombre" class="input-login" type="text" required ng-model="nombreUsuario" maxlength="100">
+                </md-input-container>
+                <md-input-container class="vaa-input" layout="row">
+                    <label class="label-login">Nombre Completo</label>
+                    <input style="width: 100% !important;" class="input-login" type="text" required ng-model="fullName" maxlength="100">
+                </md-input-container>
+                <md-input-container class="md-select-container" style="padding-left: 11px !important; width: 96% !important;" ng-show="mostrarCargaPerfil">
+                    <label style="margin-left: 11px;">Perfil</label>
+                    <md-select required ng-model="idProfile">
+                        <md-option ng-repeat="item in profiles" ng-value="item.value">{{item.profile}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="vaa-input" layout="row" ng-show="debeIndicarPassword">
+                    <p>
+                        <label class="label-login">Contraseña</label>
+                        <input class="input-login" id="password" type="password" required ng-model="password" maxlength="50">
+                    </p>
+                    <ul id="strength" check-strength="password" style="width: 110px; margin-top: 19px;"></ul>
+                </md-input-container>
+                <p style="font-size: 12px; padding-left: 12px; color: #4e4e4e" ng-show="debeIndicarPassword">
+                    <span ng-click="verPassword();" class="pointer">Ver Contraseña</span>
+                    <span style="margin-left: 20px;" ng-click="autogenerarPassword();" class="pointer">Autogenerar Contraseña</span>
+                </p>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

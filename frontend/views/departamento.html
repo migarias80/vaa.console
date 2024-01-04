@@ -1,0 +1,461 @@
+<md-dialog aria-label="Nuevo fax" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+
+            <div ng-class="getEnvironmentClass()">
+                <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+                    <md-tab label="Datos Generales">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Nombre</label>
+                                        <input class="input-generic" type="text" required ng-model="dep_name" maxlength="100">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Email</label>
+                                        <input class="input-generic" type="text" ng-model="dep_email" maxlength="100">
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                   
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Datos Telefónicos">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Interno Diurno</label>
+                                        <input class="input-generic" required type="text" ng-model="dep_daytime_number" maxlength="50" ng-blur="actualizarDTMFDiurno()" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Celular Diurno</label>
+                                        <input class="input-generic" type="text" ng-model="dep_daytime_cellular" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal">
+                                        <label>Fax Diurno</label>
+                                        <md-select ng-model="dep_fax_daytime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in faxes | filter:{fax_enabled_daytime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="dep_fax_daytime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Fax Diurno</label>
+                                        <input ng-disabled="!(dep_fax_daytime > 0)" class="input-generic" type="text" ng-model="dep_dialpost_number_fax_daytime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal" required>
+                                        <label>Voice Mail Diurno</label>
+                                        <md-select ng-model="dep_vma_daytime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in vma | filter:{vma_enabled_daytime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="dep_vma_daytime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Voice Mail Diurno</label>
+                                        <input ng-disabled="!(dep_vma_daytime > 0)" class="input-generic" type="text" ng-model="dep_dialpost_number_vma_daytime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Interno Nocturno</label>
+                                        <input class="input-generic" type="text" required ng-model="dep_nighttime_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Número de Celular Nocturno</label>
+                                        <input class="input-generic" type="text" ng-model="dep_nighttime_cellular" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal" required>
+                                        <label>Fax Nocturno</label>
+                                        <md-select ng-model="dep_fax_nighttime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in faxes | filter:{fax_enabled_nighttime: true} track by $index" ng-value="item.fax_id">{{::item.fax_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="dep_fax_nighttime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Fax Nocturno</label>
+                                        <input ng-disabled="!(dep_fax_nighttime > 0)" class="input-generic" type="text" ng-model="dep_dialpost_number_fax_nighttime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="md-select-container md-select-container-modal" required>
+                                        <label>Voice Mail Nocturno</label>
+                                        <md-select ng-model="dep_vma_nighttime">
+                                            <md-option ng-value=""><em>Ninguno</em></md-option>
+                                            <md-option ng-repeat="item in vma | filter:{vma_enabled_nighttime: true} track by $index" ng-value="item.vma_id">{{::item.vma_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" style="margin-top: 30px !important;" ng-class="dep_vma_nighttime > 0? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Post-discado Voice Mail Nocturno</label>
+                                        <input ng-disabled="!(dep_vma_nighttime > 0)" class="input-generic" type="text" ng-model="dep_dialpost_number_vma_nighttime" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Reconoc. de Voz">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-input-container class="md-select-container">
+                                        <label>Confirmación</label>
+                                        <md-select ng-model="dep_confirmation">
+                                            <!-- <md-option ng-value=""><em>N/A</em></md-option> -->
+                                            <md-option ng-repeat="item in optConfirmacion track by $index" ng-value="item.oco_id">{{::item.oco_description}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row">
+                                        <label class="label-generic">Fonética del Departamento</label>
+                                        <input class="input-generic" type="text" ng-model="dep_fon_name" maxlength="100">
+                                    </md-input-container>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Acciones Guía Interna">
+                        <md-content class="md-content-dialog">
+
+                            <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab1" md-align-tabs="top">
+                                <md-tab label="Diurno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR SIMPLE -->
+                                        <div class="contenedor-accion">
+
+                                            <!-- GUIA INTERNA / DIURNO -->
+                                            <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange('accionesIntDiur');" ng-model="dep_trans_pred_int_diurno" aria-label="Checkbox 1">
+                                                    <span class="label-generic"> Acciones Predefinidas</span>
+                                                </md-checkbox>
+                                            </div>
+                                            <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                <div flex>
+                                                    <md-input-container style="width: 88.5%;" class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Destino de Transferencia Solicitado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="tad_dep_trans_type_int_diur" ng-change="destinoTransferenciaChange('accionesIntDiur', tad_dep_trans_type_int_diur);">
+                                                            <md-option ng-value="2">Persona</md-option>
+                                                            <md-option ng-value="1">Celular</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label class="label-generic">Número de Origen a Filtrar</label>
+                                                        <input ng-disabled="dep_trans_pred_int_diurno" class="input-generic" type="text" ng-model="dep_origin_number_int_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 1</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="int_diur_accion1">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="int_diur_accion2NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="int_diur_accion2Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="int_diur_accion3NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_diurno" ng-model="int_diur_accion3Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                                <md-tab label="Noctuno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR SIMPLE -->
+                                        <div class="contenedor-accion">
+
+                                            <!-- GUIA INTERNA / NOCTURNA -->
+                                            <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange('accionesIntNoct');" ng-model="dep_trans_pred_int_nocturno" aria-label="Checkbox 1">
+                                                    <span class="label-generic"> Acciones Predefinidas</span>
+                                                </md-checkbox>
+                                            </div>
+                                            <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                <div flex>
+                                                    <md-input-container style="width: 88.5%;" class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Destino de Transferencia Solicitado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="tad_dep_transfer_type_int_noc" ng-change="destinoTransferenciaChange('accionesIntNoct', tad_dep_transfer_type_int_noc);">
+                                                            <md-option ng-value="2">Persona</md-option>
+                                                            <md-option ng-value="1">Celular</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label class="label-generic">Número de Origen a Filtrar</label>
+                                                        <input ng-disabled="dep_trans_pred_int_nocturno" class="input-generic" type="text" ng-model="dep_origin_number_int_noc" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 1</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="int_noc_accion1">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="int_noc_accion2NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="int_noc_accion2Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="int_noc_accion3NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_int_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_int_nocturno" ng-model="int_noc_accion3Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Acciones Guía Externa">
+                        <md-content class="md-content-dialog">
+
+                            <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab2" md-align-tabs="top">
+                                <md-tab label="Diurno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR SIMPLE -->
+                                        <div class="contenedor-accion">
+
+                                            <!-- GUIA EXTERNA / DIURNO -->
+                                            <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange('accionesExtDiur');" ng-model="dep_trans_pred_ext_diurno" aria-label="Checkbox 1">
+                                                    <span class="label-generic"> Acciones Predefinidas</span>
+                                                </md-checkbox>
+                                            </div>
+                                            <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                <div flex>
+                                                    <md-input-container style="width: 88.5%;" class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Destino de Transferencia Solicitado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="tad_dep_transfer_type_ext_diur" ng-change="destinoTransferenciaChange('accionesExtDiur', tad_dep_transfer_type_ext_diur);">
+                                                            <md-option ng-value="2">Persona</md-option>
+                                                            <md-option ng-value="1">Celular</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label class="label-generic">Número de Origen a Filtrar</label>
+                                                        <input ng-disabled="dep_trans_pred_ext_diurno" class="input-generic" type="text" ng-model="dep_origin_number_ext_diur" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 1</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="ext_diur_accion1">
+                                                            <!-- <md-option ng-repeat="item in optAccion1 track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option> -->
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="ext_diur_accion2NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="ext_diur_accion2Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="ext_diur_accion3NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_diurno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_diurno" ng-model="ext_diur_accion3Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                                <md-tab label="Noctuno">
+                                    <md-content class="md-content-dialog">
+
+                                        <!-- DIV DIVISOR SIMPLE -->
+                                        <div class="contenedor-accion">
+
+                                            <!-- GUIA EXTERNA / NOCTURNA -->
+                                            <div layout="row" layout-xs="row" class="md-dialog-content" style="margin-top: -25px;">
+                                                <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-change="transferenciaPredeterminadaChange('accionesExtNoct');" ng-model="dep_trans_pred_ext_nocturno" aria-label="Checkbox 1">
+                                                    <span class="label-generic"> Acciones Predefinidas</span>
+                                                </md-checkbox>
+                                            </div>
+                                            <div layout="row" layout-xs="column" class="md-dialog-content" style="margin-bottom: 10px; margin-top: -25px; background-color: #f1f1f1; border-radius: 0px;">
+                                                <div flex>
+                                                    <md-input-container style="width: 88.5%;" class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Destino de Transferencia Solicitado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="tad_dep_transfer_type_ext_noc" ng-change="destinoTransferenciaChange('accionesExtNoct', tad_dep_transfer_type_ext_noc);">
+                                                            <md-option ng-value="2">Persona</md-option>
+                                                            <md-option ng-value="1">Celular</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="vaa-input" layout="row" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label class="label-generic">Número de Origen a Filtrar</label>
+                                                        <input ng-disabled="dep_trans_pred_ext_nocturno" class="input-generic" type="text" ng-model="dep_origin_number_ext_noc" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                                    </md-input-container>                                                    
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 1</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="ext_noc_accion1">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="ext_noc_accion2NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 2 Si Acción 1 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="ext_noc_accion2Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 No Contesta</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="ext_noc_accion3NoReply">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                    <md-input-container class="md-select-container" ng-class="!dep_trans_pred_ext_nocturno? '' : 'input-generic-disabled'">
+                                                        <label>Acción 3 Si Acción 2 Ocupado</label>
+                                                        <md-select ng-disabled="dep_trans_pred_ext_nocturno" ng-model="ext_noc_accion3Busy">
+                                                            <md-option ng-repeat="item in opcionesDeTransferencia | filter: {tao_category: '!5'} | filter: {tao_category: '!6'} | filter: {tao_category: '!7'} track by $index" ng-value="item.tao_id">{{::item.tao_description}}</md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Opciones Avanzadas">
+                        <md-content class="md-content-dialog">
+
+                            <div layout="row" layout-xs="column" class="md-dialog-content">
+                                <div flex>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_allow_htdf_int" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por DTMF en Guia Interna</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_allow_htdf_ext" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por DTMF en Guia Externa</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_allow_voz_int" aria-label="Checkbox 1">
+                                            <span class="label-generic"> Habilitar Acceso por voz en Guia Interna</span>
+                                        </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_allow_voz_ext" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Acceso por voz en Guia Externa</span>
+                                    </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_gi_allow_playback_int_number" aria-label="Checkbox 1">
+                                            <span class="label-generic"> Habilitar Reproducción de Número de Interno para Guia Interna</span>
+                                        </md-checkbox>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_ge_allow_playback_int_number" aria-label="Checkbox 1">
+                                        <span class="label-generic"> Habilitar Reproducción de Número de Interno para Guia Externa</span>
+                                    </md-checkbox>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="vaa-input" layout="row" ng-class="dep_allow_htdf_int? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Acceso por DTMF en Guia Interna</label>
+                                        <input ng-disabled="!dep_allow_htdf_int" class="input-generic" type="text" ng-model="dep_int_guide_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-input-container class="vaa-input" layout="row" ng-class="dep_allow_htdf_ext? '' : 'input-generic-disabled'">
+                                        <label class="label-generic">Número de Acceso por DTMF en Guia Externa</label>
+                                        <input ng-disabled="!dep_allow_htdf_ext" class="input-generic" type="text" ng-model="dep_ext_guide_number" maxlength="50" ng-pattern-restrict="^(\d|\*|#|,)+$">
+                                    </md-input-container>
+                                    <md-checkbox style="margin-top: 27px;" layout="row" ng-class="getCheckboxClass()" ng-model="dep_play_msg_info_tranf" aria-label="">
+                                        <span class="label-generic"> Reproducir Mensaje Informativo en Transferencias Supervisadas</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+			<md-button ng-click="aplicar()" class="md-primary">
+                Aplicar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

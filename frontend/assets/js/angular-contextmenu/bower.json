@@ -1,0 +1,30 @@
+{
+  "name": "angular-contextmenu",
+  "homepage": "https://github.com/ds82/angular-contextmenu.git",
+  "description": "A contextmenu for angular & bootstrap apps",
+  "main": [
+    "dist/contextmenu.js",
+    "dist/style.css"
+  ],
+  "keywords": [
+    "ng",
+    "angular",
+    "twbs",
+    "bootstrap",
+    "contextmenu"
+  ],
+  "authors": [
+    "Dennis Sänger <npm.ng-contextmenu.15@mail.ds82.de>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/thirdparty",
+    "test",
+    "tests",
+    "spec",
+    "style"
+  ]
+}

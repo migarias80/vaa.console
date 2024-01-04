@@ -1,0 +1,202 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">Departamentos</span>
+            </p>
+        </div>
+    </div>
+
+    <div ng-class="getEnvironmentClass()">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTab" md-align-tabs="top">
+            <md-tab label="Búsqueda" ng-click="hidePreview()">
+                <md-content class="tab-busqueda" ng-show="!cargando">
+                    <div class="tab-contenido">
+                        <md-autocomplete
+                                md-no-cache="false"
+                                md-selected-item="selectedItem"
+                                md-search-text-change="searchTextChange(ctrl.searchText)"
+                                md-search-text="searchText"
+                                md-selected-item-change="selectedItemChange(item)"
+                                md-items="item in querySearch(searchText)"
+                                md-item-text="item.display"
+                                md-min-length="0"
+                                placeholder="Buscar por nombre, número de interno...">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No se encontraron resultados.
+                            </md-not-found>
+                        </md-autocomplete>
+                        <br/>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Departamento Seleccionado" ng-disabled="!idSeleccionado">
+                <md-content class="md-content-item-seleccionado-departamento tab-busqueda-resultado">
+                    <span ng-click="hidePreview()" class="close-preview"><i class="material-icons">close</i></span>
+                    <div class="tab-contenido">
+                        <div layout="row" layout-wrap layout-xs="column" class="md-dialog-content" style="margin-left: 10px;">
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">ID</label>
+                                    <input class="input-generic" type="text" maxlength="100" readonly ng-value="itemSeleccionado.dep_id">
+                                </md-input-container>
+                            </div>
+                            <div flex="75">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Nombre</label>
+                                    <input style="width: 96.6% !important;" class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.dep_name">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Número de Interno Diurno</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.dep_daytime_number">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Número de Interno Nocturno</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.dep_nighttime_number">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Número de Celular Diurno</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.dep_daytime_cellular">
+                                </md-input-container>
+                            </div>
+                            <div flex="25">
+                                <md-input-container class="vaa-input md-input-container-details-ajust" layout="row">
+                                    <label class="label-generic">Número de Celular Nocturno</label>
+                                    <input class="input-generic" type="text" maxlength="200" readonly ng-value="itemSeleccionado.dep_nighttime_cellular">
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+
+    <div layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div grid-data id='test' grid-options="gridOptions" grid-actions="gridActions">
+                    <div>
+                        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th sortable="dep_name" class="sortable vaa-grid-title">
+                                    <span>Nombre</span>
+                                </th>
+                                <th sortable="dep_daytime_number" class="sortable vaa-grid-title">
+                                    <span>Nro. de Interno Diurno</span>
+                                </th>
+                                <th sortable="dep_nighttime_number" class="sortable vaa-grid-title">
+                                    <span>Nro. de Interno Nocturno</span>
+                                </th>
+                                <th sortable="dep_daytime_cellular" class="sortable vaa-grid-title">
+                                    <span>Nro. de Celular Diurno</span>
+                                </th>
+                                <th sortable="dep_nighttime_cellular" class="sortable vaa-grid-title">
+                                    <span>Nro. de Celular Nocturno</span>
+                                </th>
+                                <th>
+                                    <span></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody">
+                            <tr context-menu="menuOptions" class="grid-con-acciones-onhover" grid-item ng-click="viewItem(item, false, false)" ng-class="isSelected(item)? 'item-seleccionado' : ''"> <!--ng-keydown="key($event)"-->
+                                <td class="vaa-grid-value" ng-bind="item.dep_name | limitTo: 20"></td>
+                                <td class="vaa-grid-value" ng-bind="item.dep_daytime_number"></td>
+                                <td class="vaa-grid-value" ng-bind="item.dep_nighttime_number"></td>
+                                <td class="vaa-grid-value" ng-bind="item.dep_daytime_cellular"></td>
+                                <td class="vaa-grid-value" ng-bind="item.dep_nighttime_cellular"></td>
+                                <td class="vaa-grid-value-context-menu">
+                                    <md-menu>
+                                        <md-menu context-menu="menuOptions" context-menu-on="click">
+                                            <i style="margin-top: 3px;" class="material-icons pointer">more_vert</i>
+                                        </md-menu>
+                                        <!-- 
+                                        <md-button class="md-icon-button" aria-label="More" ng-click="openMenu($mdMenu, $event); viewItem(item, true, false)">
+                                            <i class="material-icons">more_vert</i>
+                                        </md-button>
+                                        <md-menu-content width="2">
+                                            <md-menu-item>
+                                                <md-button ng-click="editarDepartamento(item)">
+                                                    <md-icon><i class="material-icons">mode_edit</i></md-icon>
+                                                    Editar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="eliminarDepartamento(item)">
+                                                    <md-icon><i class="material-icons">delete</i></md-icon>
+                                                    Eliminar
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button ng-click="plantillaDepartamento(item)">
+                                                    <md-icon><i class="material-icons">cached</i></md-icon>
+                                                    Usar como plantilla
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                        -->
+                                    </md-menu>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!--
+                    <div layout-xs="column" layout="row" layout-align-xs="end end" layout-align="end center">
+                    -->
+                    <!--
+                    <div>
+                        <grid-pagination max-size="5"
+                                         boundary-links="true"
+                                         class="mdl-shadow--2dp"
+                                         ng-class="getPaginationClass()"
+                                         ng-if="paginationOptions.totalItems  > paginationOptions.itemsPerPage"
+                                         total-items="paginationOptions.totalItems"
+                                         ng-model="paginationOptions.currentPage"
+                                         ng-change="reloadGrid()"
+                                         items-per-page="paginationOptions.itemsPerPage"
+                                         next-text="Siguiente"
+                                         previous-text="Anterior"
+                                         first-text="Primero"
+                                         last-text="Último">
+                        </grid-pagination>
+                    </div>
+                    -->
+  
+                </div>
+                <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid">
+                    <div class="watermark" ng-if="!gridOptions.data.length && !cargando">No se encontraron registros</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <div class="lock-size" layout="row" layout-align="right bottom">
+        <md-fab-speed-dial>
+            <md-fab-trigger>
+                <md-button ng-click="crearDepartamento()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                    <md-tooltip md-direction="top">
+                        Nuevo Departamento
+                    </md-tooltip>
+                    add
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando || cargando_soloProgressBar" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">

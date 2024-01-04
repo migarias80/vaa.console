@@ -1,0 +1,94 @@
+<md-dialog aria-label="Nueva banda horaria" class="add-edit-dialog">
+    <form ng-cloak>
+        <md-toolbar class="vaa-md-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>{{titulo}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button material-icons vaa-md-toolbar-close-button" ng-click="cancelar()">
+                    close
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="row" layout-xs="column" class="md-dialog-content">
+                <div flex>
+                    <md-input-container class="md-select-container">
+                        <label>Día</label>
+                        <md-select ng-model="ban_day_type" required>
+                            <md-option ng-repeat="item in dayTypes" ng-value="item.dat_day_type">{{item.dat_day_type}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-select-container">
+                        <label>Modo de Operación en el Complemento de los Intervalos Seleccionados</label>
+                        <md-select ng-model="ban_complement">
+                            <md-option ng-repeat="item in opcionesComplemento" ng-value="item.value">{{item.label}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- <md-input-container class="md-select-container">
+                        <label>Modo de Operación en el Intervalo Seleccionado</label>
+                        <md-select ng-model="ban_opm_code">
+                            <md-option ng-repeat="item in operationModes" ng-value="item.opm_code">{{item.opm_code}}</md-option>
+                        </md-select>
+                    </md-input-container> -->
+                    <!-- <md-input-container class="md-select-container">
+                        <label>Modo de Operación en el Complemento del Intervalo Seleccionado</label>
+                        <md-select ng-model="ban_complement">
+                            <md-option ng-repeat="item in opcionesComplemento" ng-value="item.value">{{item.label}}</md-option>
+                        </md-select>
+                    </md-input-container> -->
+                    <!-- <md-input-container class="md-select-container">
+                        <div>
+                            <rzslider rz-slider-model="slider.minValue"
+                                      rz-slider-high="slider.maxValue"
+                                      rz-slider-options="slider.options"></rzslider>
+                        </div>
+                    </md-input-container> -->
+                    <!-- <md-input-container class="vaa-input vaa-input-100" layout="row">
+                        <label class="label-generic">Descripción</label>
+                        <input  class="input-generic" type="text" ng-model="ban_description" maxlength="128">
+                    </md-input-container> -->
+                    <md-input-container class="md-select-container" style="margin-bottom: 53px !important; margin-top: 2px !important;">
+                        <md-button id="agregarRangoHorario" style="margin-bottom: 21px; margin-left: -5px;">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Intervalo Diurno</span>
+                        </md-button>
+                        <md-button id="agregarRangoHorarioNocturno" style="margin-bottom: 21px; margin-left: -5px;">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Agregar Intervalo Nocturno</span>
+                        </md-button>
+                        <!-- <md-button id="evaluarBandas">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">TEST EVALUAR BANDAS</span>
+                        </md-button> -->
+                        <!-- <div class="hora-min-label" style="margin-bottom: 30px;">
+                            <p><i class="fa fa-clock-o" aria-hidden="true"></i> Desde <span class="capitalize" style="font-weight: 400 !important;" id="horaMinDragStart"></span>
+                            Hasta <span class="capitalize" style="font-weight: 400 !important;" id="horaMinDragEnd"></span></p>
+                        </div> -->
+                        <md-button class="hora-min-label no-pointer" style="margin-bottom: 21px; width: 227px;">
+                            <p></p><i class="fa fa-clock-o" aria-hidden="true"></i> Desde <span class="capitalize" style="font-weight: 400 !important;" id="horaMinDragStart"></span>
+                            Hasta <span class="capitalize" style="font-weight: 400 !important;" id="horaMinDragEnd"></span></p>
+                        </md-button>
+                        <div>
+                            <div id="slider"></div>
+                        </div>
+                    </md-input-container>
+                    <!-- <md-input-container class="md-select-container">
+                        <md-button id="completarBandaHorariaDiurno" style="margin-left: -5px; margin-top: -17px;">
+                            <i class="fa fa-sun-o" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Completar con Diurno</span>
+                        </md-button>
+                        <md-button id="completarBandaHorariaNocturno" style="margin-left: -5px; margin-top: -17px;">
+                            <i class="fa fa-moon-o" aria-hidden="true"></i> <span class="capitalize" style="font-weight: 400 !important;">Completar con Nocturno</span>
+                        </md-button>
+                    </md-input-container> -->
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancelar()">
+                Cancelar
+            </md-button>
+            <md-button ng-click="aceptar()" class="md-primary">
+                Aceptar
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

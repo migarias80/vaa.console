@@ -1,0 +1,228 @@
+<div class="seccion">
+    <div class="nav-bar" ng-class="getNavBarClass()">
+        <div class="nav-bar-text">
+            <p>
+                <span class="md-subhead">{{nombreEmpresa}}</span>
+                <span class="md-subhead"> <i class="material-icons md-separador">chevron_right</i> </span>
+                <span class="md-bold">{{plantilla}}Bandas Horarias</span>
+            </p>
+        </div>
+    </div>
+
+    <div layout="column" layout-fill class="vaa-grid-container">
+        <md-content layout-padding layout="row" layout-align="center">
+            <div flex-gt-md="100" flex-md="100" flex-xs="100">
+                <div>
+                    <table class="calendario-bandas-horarias">
+                        <thead>
+                            <tr>
+                                <th>DÍA/HORA</th>
+                                <th style="width: 44px;" colspan="4" ng-repeat="item in horas">{{item.label}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 0 !important; border-bottom: 0 !important; border-top: 0 !important;" ng-repeat="x in [].constructor(96) track by $index"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">LUNES</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['LUNES'])" ng-repeat="banda in bandasHorariasXDia['LUNES']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">MARTES</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['MARTES'])" ng-repeat="banda in bandasHorariasXDia['MARTES']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">MIERCOLES</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['MIERCOLES'])" ng-repeat="banda in bandasHorariasXDia['MIERCOLES']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">JUEVES</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['JUEVES'])" ng-repeat="banda in bandasHorariasXDia['JUEVES']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">VIERNES</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['VIERNES'])" ng-repeat="banda in bandasHorariasXDia['VIERNES']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">SÁBADO</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['SABADO'])" ng-repeat="banda in bandasHorariasXDia['SABADO'] track by $index" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">DOMINGO</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['DOMINGO'])" ng-repeat="banda in bandasHorariasXDia['DOMINGO']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">FERIADO</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['FERIADO'])" ng-repeat="banda in bandasHorariasXDia['FERIADO']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-dia">DEFECTO</td>
+                                <td context-menu="menuOptions" ng-click="editarBandaHoraria(banda, bandasHorariasXDia['DEFECTO'])" ng-repeat="banda in bandasHorariasXDia['DEFECTO']" ng-class="banda.css" colspan="{{banda.col_span}}">
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span >= 13">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 13 && banda.col_span >= 11">
+                                        {{::banda.ban_opm_code | limitTo: 3}}. {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 11 && banda.col_span >= 5">
+                                        {{::banda.ban_opm_code | limitTo: 5}} ...
+                                    </p>
+                                    <p style="margin-left: 10px;" ng-show="banda.ban_opm_code && banda.col_span < 5 && banda.col_span >= 2">
+                                        {{::banda.ban_opm_code | limitTo: 3 }}...
+                                    </p>
+                                    <md-tooltip md-direction="top" ng-show="banda.ban_opm_code">
+                                        {{::banda.ban_opm_code}} {{::banda.ban_start_hour_label}} - {{::banda.ban_end_hour_label}}
+                                    </md-tooltip>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </md-content>
+    </div>
+
+    <div class="lock-size" layout="row" layout-align="right bottom">
+        <md-fab-speed-dial>
+            <md-fab-trigger>
+                <md-button ng-click="crearBandaHoraria()" aria-label="menu" class="md-fab md-warn material-icons md-36 vaa-md-float-button" ng-class="getEnvironmentClass()">
+                    <md-tooltip md-direction="top">
+                        Nueva banda horaria
+                    </md-tooltip>
+                    add
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+    </div>
+
+</div>
+<md-progress-linear ng-if="cargando" ng-class="getProgressBarClass()" md-mode="indeterminate" style="top: 0px; position: fixed; z-index: 99; left: 0;">
