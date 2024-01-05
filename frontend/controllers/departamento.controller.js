@@ -460,7 +460,7 @@ app.controller('DepartamentoController', function($scope, $http, UsuarioFactory,
 
 		if (!UtilsService.isEmpty($scope.dep_fon_name) && $scope.dep_fon_name != "") {
 			if (UtilsService.hasNumbers($scope.dep_fon_name)) {
-				UtilsService.showToast({delay: 5000, text: "La fonética del departamento no puede contener valores numéricos (solapa reconoc. de voz)"});
+				UtilsService.showToast({delay: 5000, text: "La fonética del departamento no puede contener valores numéricos ni caracteres especiales (solapa reconoc. de voz)"});
 				return;
 			}
 			if (UtilsService.hasUppercase($scope.dep_fon_name)) {

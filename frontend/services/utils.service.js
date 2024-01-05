@@ -420,7 +420,7 @@ app.service('UtilsService', function($mdToast, $rootScope, $location, $mdDialog,
         },
 		
 		hasNumbers: function(value) {
-            var regex = /^[a-zA-Z]+$/;
+            var regex = /^[a-zA-Z ]+$/;
 			return (!regex.test(value));
         },
 		

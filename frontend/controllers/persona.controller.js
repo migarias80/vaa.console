@@ -787,7 +787,7 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
             return;
         }
 		if (UtilsService.hasNumbers($scope.phb_first_name)) {
-            UtilsService.showToast({delay: 5000, text: "El primer nombre de la persona no puede contener valores numéricos (solapa datos generales)"});
+            UtilsService.showToast({delay: 5000, text: "El primer nombre de la persona no puede contener valores numéricos ni caracteres especiales (solapa datos generales)"});
             return;
         }
         if (UtilsService.isEmpty($scope.phb_last_name1)) {
@@ -795,15 +795,15 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
             return;
         }
 		if (UtilsService.hasNumbers($scope.phb_last_name1)) {
-            UtilsService.showToast({delay: 5000, text: "El primer apellido de la persona no puede contener valores numéricos (solapa datos generales)"});
+            UtilsService.showToast({delay: 5000, text: "El primer apellido de la persona no puede contener valores numéricos ni caracteres especiales (solapa datos generales)"});
             return;
         }
 		if (!UtilsService.isEmpty($scope.phb_middle_name) && $scope.phb_middle_name != "" && UtilsService.hasNumbers($scope.phb_middle_name)) {
-			UtilsService.showToast({delay: 5000, text: "El segundo nombre de la persona no puede contener valores numéricos (solapa datos generales)"});
+			UtilsService.showToast({delay: 5000, text: "El segundo nombre de la persona no puede contener valores numéricos ni caracteres especiales (solapa datos generales)"});
             return;
 		}
 		if (!UtilsService.isEmpty($scope.phb_last_name2) && $scope.phb_last_name2 != "" && UtilsService.hasNumbers($scope.phb_last_name2)) {
-			UtilsService.showToast({delay: 5000, text: "El segundo apellido de la persona no puede contener valores numéricos (solapa datos generales)"});
+			UtilsService.showToast({delay: 5000, text: "El segundo apellido de la persona no puede contener valores numéricos ni caracteres especiales (solapa datos generales)"});
             return;
 		}
         if (UtilsService.isEmpty($scope.phb_dep_id)) {
@@ -844,7 +844,7 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
 		
 		if (!UtilsService.isEmpty($scope.phb_fon_first_name) && $scope.phb_fon_first_name != "") {
 			if (UtilsService.hasNumbers($scope.phb_fon_first_name)) {
-				UtilsService.showToast({delay: 5000, text: "La fonética del primer nombre no puede contener valores numéricos (solapa reconoc. de voz)"});
+				UtilsService.showToast({delay: 5000, text: "La fonética del primer nombre no puede contener valores numéricos ni caracteres especiales (solapa reconoc. de voz)"});
 				return;
 			}
 			if (UtilsService.hasUppercase($scope.phb_fon_first_name)) {
@@ -854,7 +854,7 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
 		}
 		if (!UtilsService.isEmpty($scope.phb_fon_last_name1) && $scope.phb_fon_last_name1 != "") {
 			if (UtilsService.hasNumbers($scope.phb_fon_last_name1)) {
-				UtilsService.showToast({delay: 5000, text: "La fonética del primer apellido no puede contener valores numéricos (solapa reconoc. de voz)"});
+				UtilsService.showToast({delay: 5000, text: "La fonética del primer apellido no puede contener valores numéricos ni caracteres especiales (solapa reconoc. de voz)"});
 				return;
 			}
 			if (UtilsService.hasUppercase($scope.phb_fon_last_name1)) {
@@ -864,7 +864,7 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
 		}
 		if (!UtilsService.isEmpty($scope.phb_fon_middle_name) && $scope.phb_fon_middle_name != "") {
 			if (UtilsService.hasNumbers($scope.phb_fon_middle_name)) {
-				UtilsService.showToast({delay: 5000, text: "La fonética del segundo nombre no puede contener valores numéricos (solapa reconoc. de voz)"});
+				UtilsService.showToast({delay: 5000, text: "La fonética del segundo nombre no puede contener valores numéricos ni caracteres especiales (solapa reconoc. de voz)"});
 				return;
 			}
 			if (UtilsService.hasUppercase($scope.phb_fon_middle_name)) {
@@ -874,7 +874,7 @@ app.controller('PersonaController', function($scope, $http, UsuarioFactory, Util
 		}
 		if (!UtilsService.isEmpty($scope.phb_fon_last_name2) && $scope.phb_fon_last_name2 != "") {
 			if (UtilsService.hasNumbers($scope.phb_fon_last_name2)) {
-				UtilsService.showToast({delay: 5000, text: "La fonética del segundo apellido no puede contener valores numéricos (solapa reconoc. de voz)"});
+				UtilsService.showToast({delay: 5000, text: "La fonética del segundo apellido no puede contener valores numéricos ni caracteres especiales (solapa reconoc. de voz)"});
 				return;
 			}
 			if (UtilsService.hasUppercase($scope.phb_fon_last_name2)) {
